@@ -1,0 +1,96 @@
+@import url('style.css');
+/*создаем переменные*/
+:root {
+    --setting-size: 95px; /*ширина и длина шестеренки*/
+    --title-size: 40px;  /*размер заголовка*/
+    --animation-time: 4s;
+}
+.scheme-group{
+    float:left;
+}
+.image-container {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.image-container img {
+  width: 49vw;
+  height: 25vw;
+
+  display: block;
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+.image-container img:hover {
+    box-shadow: 0px 0px 5px black;
+    transform: scale(1.005);
+    margin: 0; }
+
+.image-container a {
+    width: 50%;
+    height: 50%;
+    display: block; /* Для корректной работы ширины */
+}
+.scheme-group {
+    animation: image-appear calc(var(--animation-time) * 2) forwards}
+
+.image { /*задаем другие параметры для шестерёнки на этой странице*/
+  width: 40vw;
+  height:40vw;
+  left: -40vw;
+  animation: start-setting-animation var(--animation-time) ease-out forwards, roll-back 5s var(--animation-time) ease-out forwards;
+  }
+
+
+.title span:nth-child(1){
+  animation: disappear-right var(--animation-time) forwards;
+}
+.title span:nth-child(11){
+  animation: disappear-right var(--animation-time) forwards;
+}
+.title{
+    font-size: 100px;
+    animation: decrease 5s var(--animation-time)ease-out forwards;}
+
+/*Анимации:*/
+
+@keyframes decrease{
+to{ font-size: var(--title-size)}}
+/*поворот шестеренки*/
+@keyframes start-setting-animation {
+    50% {
+        transform: rotateZ(360deg);
+        margin-left: 50vw;
+        }
+    100% {
+        left:0
+        }
+}
+@keyframes roll-back { /*шестеренка становится заданного размера*/
+    to{
+         width: var(--setting-size);
+         height:  var(--setting-size);
+    }
+
+}
+@keyframes image-appear{ /*фото с схемами выезжают*/
+0%{
+    margin-top: 100vw;
+}
+50% {
+    margin-top: 100vw;
+}
+    to {
+        margin: 0;
+    }
+}
+
+@keyframes disappear-right{ /*текст пропадает*/
+  0%{
+    margin: -300vw;
+  }
+  50%{
+    margin: -300vw;
+ }
+}

@@ -1,0 +1,73 @@
+*::selection {
+  background-color: hsl(34, 35%, 68%);
+}
+*{
+font-family: Georgia Pro Cond, Century Schoolbook, Calibri}
+
+header {
+  background: beige;
+}
+
+body {
+    background-color: #dbc791;
+}
+
+
+main {
+    min-height: calc(100vh - 160px);
+    padding: 20px 0;
+}
+
+
+.container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin:0;
+    padding:0;
+}
+.container a{
+    text-decoration: none;
+    color: black;}
+.container a::hover{
+    text-decoration: none;
+    color: black;}
+.image { /*картинка шестеренки в левом верхнем углу*/
+  margin-top: 10px;
+  margin-left: 20px;
+  width: 80px;
+  height:80px;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 30px;
+  font-weight: bold;
+  flex-grow: 1;
+}
+
+/*Иконки снизу страницы:*/
+.fa-brands.fa-telegram.fa-2x {
+  color: rgb(21, 169, 228);
+}
+.fa-brands.fa-telegram.fa-2x:hover{
+  color: hsl(197, 83%, 43%);
+}
+.fa-brands.fa-youtube.fa-2x {
+  color: rgb(237, 22, 22);
+}
+.fa-brands.fa-youtube.fa-2x:hover{
+  color: hsl(359, 74%, 43%);
+}
+
+.fa-solid.fa-bars.fa-3x {
+  text-align: right;
+  position: absolute; 
+  top: 0;
+  right: 0;
+  margin: 10px;
+}
+.fa-solid.fa-bars.fa-3x:hover{
+  color: rgba(0, 0, 0, 0.658);
+  cursor: pointer;
+}
