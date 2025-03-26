@@ -18,6 +18,15 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 
+# login_manager = LoginManager()
+# login_manager.init_app(app)
+#
+#
+# @login_manager.user_loader
+# def load_user(user_id):
+#     db_ses = db_session.create_session()
+#     return db_ses.get(User, user_id)
+
 def return_files(path):
     if not os.path.exists(path):
         raise ValueError(f"Путь {path} не найден")
@@ -40,15 +49,15 @@ def create_tuple(data, n=2):
 def index():
     css_file = url_for('static', filename='css/main_page.css')
     scheme_images = [i.split("/")[-1] for i in return_files('static/img/scheme')]
+    scheme_list = [i.split("/")[-1].split('.')[0] for i in return_files('static/img/scheme')]
     pair_images = create_tuple(scheme_images)
-    links = create_tuple(['http://127.0.0.1:8080/scheme/' + letter for letter in ['A', 'C', 'E', 'G', 'L']])
     hs_info = open('static/infos/hs_info', encoding='utf-8').read()
     return render_template('projects_page.html',
                            title='Главная страница',
                            css_url=css_file,
                            scheme_images=pair_images,
-                           hs_info=hs_info,
-                           links=links)
+                           scheme_list=scheme_list,
+                           hs_info=hs_info)
 
 
 @app.route('/scheme/<image_id>')
@@ -60,7 +69,6 @@ def scheme_details(image_id):
                                image_list=image_list)
     except Exception:
         css_file = url_for('static', filename='css/style.css')
-
         return render_template('error.html', image_id=image_id, title='Ошибка', css_url=css_file)
 
 

@@ -2,14 +2,14 @@
 
 {% block content %}
     <div class="container-md">  <!-- Добавляем ограничивающий контейнер -->
-        <div id="carouselExampleIndicators" class="carousel slide" style="max-width: 100%; margin: 0 auto">
-            <div class="carousel-indicators">
-                {% for img in image_list %}
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ loop.index0 }}"
-                        {% if loop.first %}class="active" aria-current="true"{% endif %}
-                        aria-label="Slide {{ loop.index }}"></button>
-                {% endfor %}
-            </div>
+        <div id="carouselExampleAutoplaying" class="carousel slide" style="max-width: 100%; margin: 0 auto">
+<!--            <div class="carousel-indicators">-->
+<!--                {% for img in image_list %}-->
+<!--                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ loop.index0 }}"-->
+<!--                        {% if loop.first %}class="active" aria-current="true"{% endif %}-->
+<!--                        aria-label="Slide {{ loop.index }}"></button>-->
+<!--                {% endfor %}-->
+<!--            </div>-->
             <div class="carousel-inner">
                 {% for img in image_list %}
                     <div class="carousel-item {% if loop.first %}active{% endif %}">

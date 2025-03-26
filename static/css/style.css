@@ -1,15 +1,12 @@
+/*Основной css-файл, его наследуют большинство файлов*/
 *::selection {
   background-color: hsl(34, 35%, 68%);
 }
 *{
-font-family: Georgia Pro Cond, Century Schoolbook, Calibri}
-
-header {
-  background: beige;
-}
+font-family: Jokerman, Century Schoolbook, Calibri}
 
 body {
-    background-color: #dbc791;
+  background: beige;
 }
 
 
@@ -18,6 +15,12 @@ main {
     padding: 20px 0;
 }
 
+.text{
+    font-size: 20px;
+    font-family: Jokerman;
+    background: #dbc791;
+    width:100%;
+}
 
 .container {
     display: flex;
@@ -32,6 +35,7 @@ main {
 .container a::hover{
     text-decoration: none;
     color: black;}
+
 .image { /*картинка шестеренки в левом верхнем углу*/
   margin-top: 10px;
   margin-left: 20px;
@@ -44,6 +48,41 @@ main {
   font-size: 30px;
   font-weight: bold;
   flex-grow: 1;
+}
+
+/* меню*/
+.menu-bar{
+    transform: rotate(90deg);
+    font-family: Jokerman;
+    font-size:45px;
+    text-align: right;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    opacity: 0;
+    visibility: hidden;
+    animation: image-appear  var(--animation-time) var(--animation-time)  forwards
+}
+.menu-bar:hover{
+    color:rgba(0, 0, 0, 0.658);
+    cursor:pointer;
+}
+
+.openedMenu{
+    display: none;
+    margin: 20px;
+    margin-top: 60px;
+
+    column-count: 5;
+    -webkit-column-count: 5;
+    -moz-column-count: 5;
+    column-gap: 21px;
+    -webkit-column-gap: 21px;
+    -moz-column-gap: 21px;
+    column-rule: 1px none #000000;
+    -webkit-column-rule: 1px none #000000;
+    -moz-column-rule: 1px none #000000;
 }
 
 /*Иконки снизу страницы:*/

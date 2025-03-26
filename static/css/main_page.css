@@ -2,7 +2,7 @@
 /*создаем переменные*/
 :root {
     --setting-size: 95px; /*ширина и длина шестеренки*/
-    --title-size: 40px;  /*размер заголовка*/
+    --title-size: 30px;  /*размер заголовка*/
     --animation-time: 4s;
 }
 .scheme-group{
@@ -33,8 +33,16 @@
     display: block; /* Для корректной работы ширины */
 }
 .scheme-group {
-    animation: image-appear calc(var(--animation-time) * 2) forwards}
+    opacity: 0;
+    visibility: hidden;
+    animation: image-appear var(--animation-time) var(--animation-time) forwards}
 
+.scheme-group.force-visible {
+    transition: opacity 0.5s, transform 0.3s;
+    opacity: 1 !important;
+    visibility: visible !important;
+    animation: none !important;
+}
 .image { /*задаем другие параметры для шестерёнки на этой странице*/
   width: 40vw;
   height:40vw;
@@ -52,7 +60,23 @@
 .title{
     font-size: 100px;
     animation: decrease 5s var(--animation-time)ease-out forwards;}
+.bottom-left {
+  position: absolute;
+  bottom: 8px;
+  left: 16px;
+}
 
+.text-at-start-info pre {
+    float: left;
+}
+.control-text{
+    word-break:normal;
+    border: red dashed;
+
+}
+.btn.btn-warning{
+    margin:5px;
+}
 /*Анимации:*/
 
 @keyframes decrease{
@@ -74,18 +98,12 @@ to{ font-size: var(--title-size)}}
     }
 
 }
-@keyframes image-appear{ /*фото с схемами выезжают*/
-0%{
-    margin-top: 100vw;
-}
-50% {
-    margin-top: 100vw;
-}
+@keyframes image-appear {
     to {
-        margin: 0;
+        opacity: 1;
+        visibility: visible;
     }
 }
-
 @keyframes disappear-right{ /*текст пропадает*/
   0%{
     margin: -300vw;
