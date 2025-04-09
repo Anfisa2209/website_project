@@ -1,9 +1,9 @@
 @import url('style.css');
-h1 {
-text-align: center;
-}
 .menu-bar{
     opacity: 1;
     visibility: visible;
 
+}
+.btn-btn-danger{
+    font-family:Calibri;
 }

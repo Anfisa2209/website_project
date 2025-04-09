@@ -1,0 +1,49 @@
+@import url('style.css');
+
+.menu-bar{
+    opacity: 1;
+    visibility: visible;
+
+}
+.message {
+    font-size:20px;
+    color:white;
+    margin: 10px;
+}
+.input-wrapper {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.input-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 1.2rem;
+}
+
+
+.login-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    font-size:20px;
+    color:white;
+    background-image: url("/static/img/wood_fon.jpg");
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.form-control {
+    border-radius: 25px;
+    height: 45px;
+    transition: all 0.3s ease;
+    font-family: Calibri;
+}
+
+.form-control:focus {
+    border-color: #cca566;
+    box-shadow: 0 0 0 0.2rem rgba(204, 165, 102,0.50);
+}

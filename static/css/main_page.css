@@ -74,9 +74,6 @@
     border: red dashed;
 
 }
-.btn.btn-warning{
-    margin:5px;
-}
 /*Анимации:*/
 
 @keyframes decrease{

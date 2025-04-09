@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 style="text-align:center">Вход</h1>
+    <div class="login-container">
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <div class="input-wrapper">
+                <p>
+                    {{ form.email.label }}<br>
+                    {{ form.email(class="form-control", type="email") }}
+                    <i class="fa-regular fa-user input-icon"></i><br>
+                    {% for error in form.email.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="message">{{ email_message }}</div>
+
+            <div class="input-wrapper">
+                <p>
+                    {{ form.password.label }}<br>
+                    {{ form.password(class="form-control", type="password") }}
+                    <i class="fa-solid fa-lock input-icon"></i><br>
+                    {% for error in form.password.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </p>
+            </div>
+
+            <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+            <p>{{ form.submit(type="submit", class="btn btn-warning") }}</p>
+        </form>
+    </div>
+{% endblock %}

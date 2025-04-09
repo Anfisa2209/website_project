@@ -3,7 +3,7 @@
   background-color: hsl(34, 35%, 68%);
 }
 *{
-font-family: Jokerman, Century Schoolbook, Calibri}
+font-family: Century Schoolbook, Calibri}
 
 body {
   background: beige;
@@ -49,6 +49,9 @@ main {
   font-weight: bold;
   flex-grow: 1;
 }
+.title span {
+
+  font-family:Jokerman;}
 
 /* меню*/
 .menu-bar{

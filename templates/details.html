@@ -1,39 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container-md">  <!-- Добавляем ограничивающий контейнер -->
-        <div id="carouselExampleAutoplaying" class="carousel slide" style="max-width: 100%; margin: 0 auto">
-<!--            <div class="carousel-indicators">-->
-<!--                {% for img in image_list %}-->
-<!--                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ loop.index0 }}"-->
-<!--                        {% if loop.first %}class="active" aria-current="true"{% endif %}-->
-<!--                        aria-label="Slide {{ loop.index }}"></button>-->
-<!--                {% endfor %}-->
-<!--            </div>-->
-            <div class="carousel-inner">
-                {% for img in image_list %}
-                    <div class="carousel-item {% if loop.first %}active{% endif %}">
-                        <img src="{{ url_for('static', filename=img) }}"
-                             class="d-block mx-auto img-fluid"
-                             style="max-height: 600px;
-                                    width: 100%"
-                             alt="Фото {{ loop.index }} схемы {{ image_id }}">
-                    </div>
-                {% endfor %}
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-    </div>
+<style>
 
+    .menu_bar{
+    display: block;
+    }
+</style>
+<div style="position: relative; height: 100vh;">
+    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        {% for img in image_list %}
+            <div class="carousel-item {% if loop.first %}active{% endif %} ">
+                <img src="{{ url_for('static', filename=img) }}"
+                     class="d-block mx-auto img-fluid"
+                     style="max-height: 600px;
+                            width: 100%"
+                     alt="Фото {{ loop.index }} схемы {{ image_id }}">
+            </div>
+        {% endfor %}
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+ </div>
     <h1 class="text-center mt-3">Схема {{ image_id }}</h1>
 
 {% endblock %}
