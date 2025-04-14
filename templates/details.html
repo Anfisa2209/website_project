@@ -1,35 +1,110 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
 
-    .menu_bar{
-    display: block;
-    }
-</style>
-<div style="position: relative; height: 100vh;">
-    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner">
-        {% for img in image_list %}
-            <div class="carousel-item {% if loop.first %}active{% endif %} ">
-                <img src="{{ url_for('static', filename=img) }}"
-                     class="d-block mx-auto img-fluid"
-                     style="max-height: 600px;
-                            width: 100%"
-                     alt="Фото {{ loop.index }} схемы {{ image_id }}">
-            </div>
-        {% endfor %}
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
+<div>
+    <div class="carousel_images" style="position: relative;">
+        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            {% for img in image_list %}
+                <div class="carousel-item {% if loop.first %}active{% endif %} ">
+                    <img src="{{ url_for('static', filename=img) }}"
+                         class="d-block mx-auto img-fluid"
+                         style="max-height: 600px;
+                                width: 100%"
+                         alt="Фото {{ loop.index }} схемы {{ image_id }}">
+                </div>
+            {% endfor %}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+
     </div>
- </div>
     <h1 class="text-center mt-3">Схема {{ image_id }}</h1>
+
+    <div class="text">
+        <pre>
+                А вот тут просто какой-то текст,
+        он очень интересный
+        </pre>
+
+    </div>
+   <div class="comment_section">
+        <h5 style="margin:20px;text-align:left">Комментарии ({{count_comments}}):</h5>
+        <div id="comments">
+            {% if current_user.is_authenticated %}
+                <form method="POST" style="margin:20px;">
+                    {{ form.hidden_tag() }}
+                    <div class="input-wrapper">
+                        <p>
+                            {{ form.text.label }}<br>
+                            {{ form.text(class="form-control") }}<br>
+                            {% for error in form.text.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        </p>
+                    </div>
+                    <p>{{ form.submit(type="submit", class="btn btn-warning") }}</p>
+                </form>
+            {% else %}
+                <p><a href="{{ url_for('login') }}">Войдите</a> или <a href="{{ url_for('register') }}">Зарегистрируйтесь</a>, чтобы оставить комментарий.</p>
+            {% endif %}
+
+            {% for comment in comments %}
+                <div class="comment mb-3" data-comment-id="{{ comment['id'] }}">
+                    <!-- Режим просмотра -->
+                    <div class="view-mode">
+                        <p><strong>{{ comment.user_name }}:</strong> <br><span class="comment-text">{{ comment.text }}</span></p>
+                        {% if current_user.is_authenticated and comment.user_id == current_user.id %}
+                            <button class="btn btn-sm btn-light edit-comment">Изменить</button>
+                            <a href="/delete_comment/{{comment.id}},{{image_id}}" class="btn btn-sm btn-danger">Удалить</a>
+                        {% endif %}
+                    </div>
+
+                    <!-- Режим редактирования -->
+                    <div class="edit-mode" style="display: none;">
+                        <form method="POST" action="{{ url_for('update_comment', comment_id=comment.id) }}">
+                            <textarea name="text" class="form-control mb-2">{{ comment.text }}</textarea>
+                            <button type="submit" class="btn btn-sm btn-success">Сохранить</button>
+                            <button type="button" class="btn btn-sm btn-secondary cancel-edit">Отмена</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Обработчики для кнопок "Изменить"
+    document.querySelectorAll('.edit-comment').forEach(button => {
+        button.addEventListener('click', function() {
+            const commentDiv = this.closest('.comment');
+            commentDiv.querySelector('.view-mode').style.display = 'none';
+            commentDiv.querySelector('.edit-mode').style.display = 'block';
+        });
+    });
+
+    // Обработчики для кнопок "Отмена"
+    document.querySelectorAll('.cancel-edit').forEach(button => {
+        button.addEventListener('click', function() {
+            const commentDiv = this.closest('.comment');
+            commentDiv.querySelector('.edit-mode').style.display = 'none';
+            commentDiv.querySelector('.view-mode').style.display = 'block';
+        });
+    });
+});
+</script>
 
 {% endblock %}

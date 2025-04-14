@@ -1,10 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 style="text-align:center">Вход</h1>
+    <h1 style="text-align:center">Регистрация</h1>
     <div class="login-container">
         <form action="" method="post">
             {{ form.hidden_tag() }}
+            <div class="input-wrapper">
+                 <p>
+                    {{ form.name.label }}<br>
+                    {{ form.name(class="form-control") }}<br>
+                    {% for error in form.name.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </p>
+
+            </div>
             <div class="input-wrapper">
                 <p>
                     {{ form.email.label }}<br>

@@ -4,7 +4,7 @@ from werkzeug.exceptions import NotFound
 from werkzeug.security import generate_password_hash
 
 from data import db_session
-from data.users import User
+from data.models.users import User
 from api.users.reqparse_user import parser
 
 
@@ -20,7 +20,7 @@ class UsersResource(Resource):
             raise NotFound('Пользователь не найден!')
         return jsonify(
             {'users': [
-                user.to_dict(only=('id', 'email'))]}
+                user.to_dict(only=('id', 'email', 'name'))]}
         )
 
     def delete(self, user_id):
@@ -44,7 +44,7 @@ class UsersResource(Resource):
         session.commit()
         return jsonify(
             {'users': [
-                user.to_dict(only=('id', 'email'))]}
+                user.to_dict(only=('id', 'email', 'name'))]}
         )
 
 
@@ -55,8 +55,7 @@ class UsersListResource(Resource):
         return jsonify(
             {'users': (
                 [item.to_dict(only=(
-                    'id', 'surname', 'name', 'age', 'position', 'speciality', 'address', 'email'
-                )) for
+                    'id', 'email', 'name')) for
                     item in users])
 
             }
@@ -67,13 +66,14 @@ class UsersListResource(Resource):
         session = db_session.create_session()
         user = User(
             email=args['email'],
-            hashed_password=set_password(args['hashed_password'])
+            hashed_password=set_password(args['hashed_password']),
+            name=args['name']
         )
         session.add(user)
         session.commit()
         return jsonify(
             {'users': [
-                user.to_dict(only=('id', 'email'))]
+                user.to_dict(only=('id', 'email', 'name'))]
 
             }
         )

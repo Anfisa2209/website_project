@@ -21,25 +21,23 @@
         </div></a>
           <span class="menu-bar" onclick="openMenu()" id="menuBar">lll</span></div>
     <div class="openedMenu" id="Menu">
+        <div class="div1">
         <h2>Схемы</h2>
         <ul>
+
             {% for scheme in scheme_list %}
                 <li><a href="/scheme/{{ scheme }}" style="font-size:20px">{{scheme}}</a></li>
             {% endfor%}
-        </ul>
-        <h2>Опыт</h2>
-        <ul>
-            <li>О создателе</li>
-            <li>Отзывы</li>
-            <li>Практика</li>
-        </ul>
-        <h2>Контакты</h2>
-        <ul>
-            <li>Опция 1</li>
-            <li>Опция 2</li>
-            <li>Опция 3</li>
-        </ul>
-        <h2>Личный кабинет</h2>
+        </ul></div>
+        <div class="div2">
+            <h2>Опыт</h2>
+            <ul>
+                <li>О создателе</li>
+                <li>Отзывы</li>
+                <li>Практика</li>
+            </ul></div>
+        <div class="div3">
+            <h2>Личный кабинет</h2>
         <ul>
             {% if current_user.is_authenticated %}
               <li><a href="/profile"> Мой профиль</a></li>
@@ -48,9 +46,11 @@
               <li><a href="/register">Зарегистрироваться</a></li>
             {% endif %}
         </ul>
-        <button type="button" class="btn btn-outline-warning"><a href="/calculate"
+        </div>
+    <div class="div4"><button type="button" class="btn btn-outline-warning"><a href="/calculate"
                                                                  style="text-decoration:none;
-                                                                        color:brown;">Рассчитать</a></button>
+                                                                        color:brown;">Рассчитать</a></button></div>
+
 
 
     </div>

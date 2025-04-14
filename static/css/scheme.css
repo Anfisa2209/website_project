@@ -7,3 +7,17 @@ text-align: center;
     visibility: visible;
 
 }
+.carousel_images{
+    max-width:600px;
+    height:auto;
+}
+.comment {
+    padding: 15px;
+    margin: 15px;
+    border-radius: 5px;
+    background-color:#ede5b7;
+}
+
+.edit-comment, .delete-comment {
+    margin-top: 10px;
+}

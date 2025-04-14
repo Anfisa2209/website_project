@@ -1,6 +1,6 @@
 function openMenu() {
     if (document.getElementById('menuBar').textContent == 'lll') {
-        document.getElementById('Menu').style.display = 'block';
+        document.getElementById('Menu').style.display = 'grid';
         document.getElementById('contentMain').style.display = 'none';
         document.getElementById('contentFooter').style.display = 'none';
         document.getElementById('menuBar').textContent = 'X';
