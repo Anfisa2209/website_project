@@ -1,16 +1,16 @@
 @import url('style.css');
 h1 {
-text-align: center;
+margin-left:20px;
 }
 .menu-bar{
     opacity: 1;
     visibility: visible;
 
 }
-.carousel_images{
+/*.carousel_images{
     max-width:600px;
     height:auto;
-}
+}*/
 .comment {
     padding: 15px;
     margin: 15px;
@@ -20,4 +20,9 @@ text-align: center;
 
 .edit-comment, .delete-comment {
     margin-top: 10px;
+}
+
+.calculate-button{
+   display: flex;
+   justify-content: center;
 }

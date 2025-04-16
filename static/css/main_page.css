@@ -74,6 +74,14 @@
     border: red dashed;
 
 }
+
+.bottomleft {
+  position: absolute;
+  bottom: 8px;
+  left: 12px;
+  font-size: 40px;
+  color:white;
+}
 /*Анимации:*/
 
 @keyframes decrease{

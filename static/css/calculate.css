@@ -1,0 +1,74 @@
+@import url('style.css');
+.menu-bar{
+    opacity: 1;
+    visibility: visible;
+
+}
+.choose-scheme{
+   display: flex !important;
+   justify-content: center !important;
+}
+
+.row-fields {
+    display: flex;
+}
+
+.size-field {
+    flex: 1;
+}
+
+.portal-size p {
+    float: none;
+}
+.parent {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+.image-div { grid-area: 1 / 1 / 2 / 2; }
+.image-div img {
+    width: 600px;
+    height: auto;
+    border-radius: 8px;
+    margin-left: 20px;
+    position:fixed;
+}
+.parameters { grid-area: 1 / 2 / 2 / 3; }
+
+@media (max-width: 600px) {
+    .parent {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .image-div {
+        order: 1;
+        width: 100%;
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .image-div img {
+        width: 100%;
+        max-width: 400px;
+        position: static;
+        margin: 0 auto;
+    }
+
+    .parameters {
+        order: 2;
+        width: 100%;
+        padding: 0 15px;
+    }
+    .row-fields {
+        flex-direction: column;
+    }
+
+    .size-field {
+        width: 100%;
+    }
+}

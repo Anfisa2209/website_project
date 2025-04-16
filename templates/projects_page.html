@@ -16,9 +16,14 @@
         <div class="image-container">
             {% for i in imgs %}
             {% set scheme_id =  i.split('.')[0] %}
-            <a href="/scheme/{{ scheme_id }}">
+            <div style="position: relative;">
+                <a href="/scheme/{{ scheme_id }}">
                 <img src="/static/img/scheme/{{ i }}" id="{{ i }}" class="scheme-image" alt="схема {{ scheme_id }}">
             </a>
+            <div class="bottomleft">Схема {{scheme_id}}</div>
+
+            </div>
+
             {% endfor %}
         </div>
     {% endfor %}

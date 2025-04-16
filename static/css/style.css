@@ -56,7 +56,9 @@ main {
 .title span {
 
   font-family:Jokerman;}
-
+.btn.btn-warning{
+    font-size:20px;
+}
 /* меню*/
 .menu-bar{
     transform: rotate(90deg);

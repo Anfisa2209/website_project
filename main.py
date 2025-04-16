@@ -6,12 +6,14 @@ from requests import get, post, delete, put
 from api.comments.comment_resource import CommentsListResource, CommentsResource
 from api.users.users_resource import UsersResource, UsersListResource
 from data import db_session
+from data.forms.calculate_from import CalculateFrom
 from data.forms.comment_form import CommentForm
 from data.forms.login_form import LoginForm
 from data.forms.register_form import RegisterForm
 from data.models.users import User
 from tools.scheme_list import SCHEME_LIST
 from tools.service_files import return_files, create_tuple, SERVER_URL, get_comments
+from tools.sqlite import return_scheme_id
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -31,7 +33,7 @@ login_manager.init_app(app)
 @app.context_processor
 def inject_schemes():
     # Передаем список во все шаблоны
-    return {"scheme_list": SCHEME_LIST}
+    return {"scheme_list": SCHEME_LIST, "css_url": url_for('static', filename='css/scheme.css')}
 
 
 @login_manager.user_loader
@@ -100,6 +102,18 @@ def scheme_details(image_id):
     return render_template('details.html', title=f'Схема {image_id}', css_url=css_file, image_id=image_id,
                            image_list=image_list, comments=comments, form=form,
                            count_comments=len(comments))
+
+
+@app.route('/calculate/<scheme>', methods=['GET', 'POST'])
+def calculate(scheme):
+    form = CalculateFrom()
+    if form.validate_on_submit():
+        ...
+    if scheme == "scheme":  # если схему не выбрали и перешли через меню
+        return render_template('calculate.html', scheme_id=scheme)
+    data = {"scheme": scheme, "scheme_id": return_scheme_id(scheme), "form": form,
+            'css_url': url_for('static', filename='css/calculate.css')}
+    return render_template('calculate.html', **data)
 
 
 @app.route('/login', methods=['GET', 'POST'])

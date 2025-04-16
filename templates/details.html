@@ -3,6 +3,7 @@
 {% block content %}
 
 <div>
+    <h1 >Схема {{ image_id }}</h1>
     <div class="carousel_images" style="position: relative;">
         <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
@@ -27,8 +28,6 @@
         </div>
 
     </div>
-    <h1 class="text-center mt-3">Схема {{ image_id }}</h1>
-
     <div class="text">
         <pre>
                 А вот тут просто какой-то текст,
@@ -36,6 +35,12 @@
         </pre>
 
     </div>
+    <div class="calculate-button">
+
+        <a href="/calculate/{{image_id}}">
+        <button type="button" class="btn btn-warning">Рассчитать</button></a>
+    </div>
+
    <div class="comment_section">
         <h5 style="margin:20px;text-align:left">Комментарии ({{count_comments}}):</h5>
         <div id="comments">
@@ -45,7 +50,7 @@
                     <div class="input-wrapper">
                         <p>
                             {{ form.text.label }}<br>
-                            {{ form.text(class="form-control") }}<br>
+                            {{ form.text(class="form-control",  placeholder="Поделитесь своим мнением...") }}<br>
                             {% for error in form.text.errors %}
                                 <div class="alert alert-danger" role="alert">
                                     {{ error }}
@@ -73,7 +78,7 @@
                     <!-- Режим редактирования -->
                     <div class="edit-mode" style="display: none;">
                         <form method="POST" action="{{ url_for('update_comment', comment_id=comment.id) }}">
-                            <textarea name="text" class="form-control mb-2">{{ comment.text }}</textarea>
+                            <textarea name="text" class="form-control mb-2" required>{{ comment.text }}</textarea>
                             <button type="submit" class="btn btn-sm btn-success">Сохранить</button>
                             <button type="button" class="btn btn-sm btn-secondary cancel-edit">Отмена</button>
                         </form>
