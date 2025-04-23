@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <script src="/static/js/choose_handle.js"></script>
+
     {% if scheme_id == "scheme"%}
         <div class="choose-scheme text-center">
             <h5>Сначала выберите схему, которую хотите рассчитать</h5>
@@ -29,11 +31,17 @@
                     transform: translate(-50%, -50%) !important;
                 }
             }
+            .parameters {
+                display:none;
+            }
         </style>
     {%endif%}
+
     <div class="parent">
         <div class="image-div">
-            <img src="/static/img/scheme/{{scheme}}.jpg" alt="Картинка схемы {{scheme}}">
+            {% if scheme_id != "scheme" %}
+            <img src="/static/img/scheme/{{scheme}}.jpg" alt="Картинка схемы {{scheme}}"  class="scheme-image">
+            {%endif%}
         </div>
         <div class="parameters">
             <form action="" method="post">
@@ -42,7 +50,7 @@
             <div class="row-fields">
             <div class="size-field">
                 <p><strong>1.</strong>
-                    {{ form.width.label }}<br>
+                    <strong>{{ form.width.label }} (min - {{min_size[0]}}мм, max - {{max_size[0]}}мм)</strong><br>
                     {{ form.width(class="form-control") }}<br>
                     {% for error in form.width.errors %}
                         <p class="alert alert-danger" role="alert">
@@ -54,7 +62,7 @@
 
             <div class="size-field">
                 <p>
-                    {{ form.height.label }}<br>
+                    <strong>{{ form.height.label }} (min - 2100мм, max - {{max_size[1]}}мм)</strong><br>
                     {{ form.height(class="form-control") }}<br>
                     {% for error in form.height.errors %}
                         <p class="alert alert-danger" role="alert">
@@ -65,50 +73,65 @@
             </div>
         </div>
 
-            <p><strong>2.</strong>
-                {% for material in form.materials %}
-                <tr>
-                    <td>{{ material }}</td>
-                    <td>{{ material.label }}</td>
-                </tr>
-                {% endfor %}
-            </p>
+            <p><strong>2. Материал</strong></p>
+            <div class="materials-options">
+                {% for subfield in form.materials %}
+                    <label class="material-option">
+                        {{ subfield }}
+                        {% set materials = {1: "oak.png", 2:"pine.png", 3:"larch.png"}%}
+                        <img src="/static/img/calculate_form_img/materials/{{materials[subfield.data]}}" alt="Порода дерева" class="material-img">
 
-            <p> <strong>3.</strong>
-                {% for steklopaket in form.steklopakets %}
-                <tr>
-                    <td>{{ steklopaket }}</td>
-                    <td>{{ steklopaket.label }}</td>
-                </tr>
+                        <span class="material-label">{{ subfield.label.text }}</span>
+                    </label>
                 {% endfor %}
-            </p>
+            </div>
+            <p> <strong>3. Стеклопакет</strong></p>
+                <div class="glass-options">
+                    {% for steklopaket in form.steklopakets %}
+                    <label class="material-option">
+                        {{ steklopaket }}
+                        {% set steklopakets_title = {1: "однокамерный.jpg", 2: "двухкамерный.jpg"} %}
+                        <img src="/static/img/calculate_form_img/steklopaket/{{steklopakets_title[steklopaket.data]}}" alt="Стеклопакеты" class="material-img">
+                        <span class="material-label">{{ steklopaket.label.text }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
 
-            <p> <strong>4.</strong>
+            <p> <strong>4. Цвет ручки</strong></p>
+            <div class="color-options">
+                {% set color_names = {1: "серебро.jpg", 2: "бронза.jpg", 3: "белый.jpg", 4: "коричневый.jpg"} %}
                 {% for color in form.handle_color %}
-                <tr>
-                    <td>{{ color }}</td>
-                    <td>{{ color.label }}</td>
-                </tr>
+                <label class="material-option">
+                    {{ color }}
+                    <img src="/static/img/calculate_form_img/handle_colors/{{color_names[color.data]}}" alt="Цвета" class="material-img">
+                    <span class="material-label">{{ color.label.text }}</span>
+                </label>
                 {% endfor %}
-            </p>
+            </div>
 
-            <p> <strong>5.</strong>
-                {% for model in form.handle_models %}
-                <tr>
-                    <td>{{ model }}</td>
-                    <td>{{ model.label }}</td>
-                </tr>
+            <p> <strong>5. Модель ручки</strong></p>
+            <div class="materials-options">
+                {% for model in form.handle_models  %}
+                <label>
+                    {{ model }}
+                    <span >{{ model.label.text }}</span>
+                </label>
                 {% endfor %}
-            </p>
-            <div> <p> <strong>6</strong></p>
-                {{ form.color.label }}<br>
+            </div>
+
+            <div class="handle-preview">
+                <p><strong>Выбранная ручка:</strong></p>
+                <img id="handle-preview-image" src="" alt="Превью ручки" style="max-width: 200px; display: none;">
+            </div>
+
+            <div> <p> <strong>6.{{ form.color.label }}</strong></p><br>
                 {{ form.color() }}
                 {% if form.color.errors %}
-                    <div style="color: red;">{{ form.color.errors[0] }}</div>
+                    <div >{{ form.color.errors[0] }}</div>
                 {% endif %}
             </div>
 
-            <p>{{ form.calculate(type="submit", class="btn btn-primary") }}</p>
+            <p>{{ form.calculate(type="submit", class="btn btn-warning") }}</p>
                 <div class="message">{{message}}</div>
         </form>
 

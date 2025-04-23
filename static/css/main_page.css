@@ -60,11 +60,6 @@
 .title{
     font-size: 100px;
     animation: decrease 5s var(--animation-time)ease-out forwards;}
-.bottom-left {
-  position: absolute;
-  bottom: 8px;
-  left: 16px;
-}
 
 .text-at-start-info pre {
     float: left;
@@ -79,7 +74,7 @@
   position: absolute;
   bottom: 8px;
   left: 12px;
-  font-size: 40px;
+  font-size: 3vw;
   color:white;
 }
 /*Анимации:*/

@@ -3,7 +3,7 @@ import sqlite3
 
 # Путь к tools/sqlite.py
 current_dir = Path(__file__).parent
-db_path = current_dir.parent / "db" / "portal_data.db"  # Корректный путь к БД
+db_path = current_dir.parent / "db" / "portal_data.db"
 
 connect = sqlite3.connect(db_path, check_same_thread=False)
 cursor = connect.cursor()
