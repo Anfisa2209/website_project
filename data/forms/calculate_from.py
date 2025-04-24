@@ -4,11 +4,9 @@ from wtforms.validators import DataRequired, NumberRange
 
 
 class CalculateFrom(FlaskForm):
-    width = IntegerField('Ширина', validators=[DataRequired(),
-                                               NumberRange(min=1500, max=15000,
-                                                           message='Значение должно быть между %(min)s и %(max)s')])
-    height = IntegerField('Длина', validators=[DataRequired(),
-                                               NumberRange(min=2300, max=3000,
+    width = IntegerField('Ширина', validators=[DataRequired()])
+    height = IntegerField('Длина', validators=[DataRequired(message="Обязательное поле"),
+                                               NumberRange(min=2100, max=3000,
                                                            message='Значение должно быть между %(min)s и %(max)s')])
     materials = RadioField("Выберите материал",
                            choices=[
@@ -23,7 +21,7 @@ class CalculateFrom(FlaskForm):
                                   (2, "Двухкамерный"),
                               ],
                               validators=[DataRequired()])
-    handle_color = RadioField("Выберите материал",
+    handle_color = RadioField("Выберите цвет",
                               choices=[
                                   (1, "Серебро"),
                                   (2, "Бронза"),
@@ -31,7 +29,7 @@ class CalculateFrom(FlaskForm):
                                   (4, "Коричневый")
                               ],
                               validators=[DataRequired()])
-    handle_models = RadioField("Выберите материал",
+    handle_models = RadioField("Выберите модель ручки",
                                choices=[
                                    (1, "Односторонняя"),
                                    (2, "Двухсторонняя")
@@ -40,3 +38,16 @@ class CalculateFrom(FlaskForm):
     color = ColorField('Выберите цвет портала', default='#ffffff')
 
     calculate = SubmitField('Рассчитать')
+
+    def __init__(self, scheme_limits=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if scheme_limits:
+            self.width.validators = [
+                DataRequired(message="Обязательное поле"),
+                NumberRange(
+                    min=scheme_limits['min_width'],
+                    max=scheme_limits['max_width'],
+                    message=f"Ширина должна быть между {scheme_limits['min_width']} и {scheme_limits['max_width']} мм"
+                )
+            ]
+

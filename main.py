@@ -13,7 +13,7 @@ from data.forms.register_form import RegisterForm
 from data.models.users import User
 from tools.scheme_list import SCHEME_LIST
 from tools.service_files import return_files, create_tuple, SERVER_URL, get_comments
-from tools.sqlite import return_scheme_id
+from tools.sqlite import return_scheme_id, return_min_max_size, return_price, return_material_id, calculate_total_price
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -49,9 +49,19 @@ def logout():
     return redirect('/')
 
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('error.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('500.html'), 500
+
+
 @app.route('/delete_comment/<int:comment_id>,<image_id>')
 def delete_comment(comment_id, image_id):
-    if delete(f'{SERVER_URL}/api/comments/{comment_id}').json().get("success"):
+    if delete(f'{SERVER_URL}/{API_PREFIX}/comments/{comment_id}').json().get("success"):
         flash('Комментарий удален')
         return redirect(f'/scheme/{image_id}')
     return
@@ -59,7 +69,7 @@ def delete_comment(comment_id, image_id):
 
 @app.route('/update_comment/<int:comment_id>', methods=['POST'])
 def update_comment(comment_id):
-    comment = get(f"{SERVER_URL}/api/comments/{comment_id}").json()
+    comment = get(f"{SERVER_URL}/{API_PREFIX}/comments/{comment_id}").json()
     if not comment.get('comments'):
         abort(404)
     if comment['comments'][0]['user_id'] != current_user.id:
@@ -67,7 +77,7 @@ def update_comment(comment_id):
     comment = comment['comments'][0]
     new_text = request.form.get('text')
     user_id, scheme_name = comment['user_id'], comment['scheme_name']
-    put(f'http://127.0.0.1:8080/api/comments/{comment_id}', json={'text': new_text,
+    put(f'{SERVER_URL}/{API_PREFIX}/comments/{comment_id}', json={'text': new_text,
                                                                   'user_id': user_id,
                                                                   'scheme_name': scheme_name})
     link = f'/scheme/{scheme_name}'
@@ -106,13 +116,29 @@ def scheme_details(image_id):
 
 @app.route('/calculate/<scheme>', methods=['GET', 'POST'])
 def calculate(scheme):
-    form = CalculateFrom()
-    if form.validate_on_submit():
-        ...
     if scheme == "scheme":  # если схему не выбрали и перешли через меню
-        return render_template('calculate.html', scheme_id=scheme)
-    data = {"scheme": scheme, "scheme_id": return_scheme_id(scheme), "form": form,
-            'css_url': url_for('static', filename='css/calculate.css')}
+        return render_template('calculate.html', scheme_id=scheme, form=CalculateFrom(), min_size=(), max_size=())
+
+    scheme_id = return_scheme_id(scheme)
+    min_size, max_size = return_min_max_size(scheme)
+    scheme_limits = {'min_width': min_size[0], 'max_width': max_size[0]} if scheme_id else None
+    form = CalculateFrom(scheme_limits=scheme_limits)
+    if form.validate_on_submit():
+        data = {
+            'width': form.width.data,
+            'height': form.height.data,
+            'material': int(form.materials.data),
+            'steklopakets': int(form.steklopakets.data),
+            'handle_color': int(form.handle_color.data),
+            'handle_models': int(form.handle_models.data),
+            'portal_color': form.color.data,
+            'scheme_id': scheme_id
+        }
+        price = str(calculate_total_price(data))
+        return price
+
+    data = {"scheme": scheme, "scheme_id": scheme_id, "form": form,
+            'css_url': url_for('static', filename='css/calculate.css'), 'min_size': min_size, 'max_size': max_size}
     return render_template('calculate.html', **data)
 
 
