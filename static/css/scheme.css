@@ -26,3 +26,19 @@ margin-left:20px;
    display: flex;
    justify-content: center;
 }
+
+.video {
+    width: 50%;
+    height: auto
+}
+.video-block {
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .video {
+    width: 100%;
+    height: auto
+}
+
+}

@@ -19,11 +19,14 @@ main {
     padding: 20px 0;
 }
 
-.text{
+.text {
     font-size: 20px;
     font-family: Jokerman;
     background: #dbc791;
     width:100%;
+    margin-left:5px;
+    will-change: transform;
+    word-wrap: break-word;
 }
 
 .container {
@@ -118,4 +121,11 @@ main {
 .fa-solid.fa-bars.fa-3x:hover{
   color: rgba(0, 0, 0, 0.658);
   cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .text {
+        max-width: ;
+        overflow-wrap: break-word;
+    }
 }

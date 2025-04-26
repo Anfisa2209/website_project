@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="result-info">
+    <h1>Вы заказали схему: {{scheme}}</h1>
+    <h2>Выбранные вами параметры:</h2>
+    {% for key, value in parameters.items()%}
+        <h5 class="item-view">{{key}}: {{value}}</h5>
+    {% endfor %}
+
+    <h3 style="color:green"> Итоговая цена: {{price}}</h3>
+</div>
+
+{% endblock %}

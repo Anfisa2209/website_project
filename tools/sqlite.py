@@ -58,4 +58,4 @@ def calculate_total_price(data: dict):
     total_price += price + height * width * 0.8 / 1000000 * glass_price
     handle_number = cursor.execute('SELECT door_number FROM Portals WHERE id = ?', (scheme_id,)).fetchone()[0]
     total_price += 10000 * handle_number if handle_model_id == 2 else 0
-    return total_price
+    return int(total_price)

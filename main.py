@@ -11,15 +11,19 @@ from data.forms.comment_form import CommentForm
 from data.forms.login_form import LoginForm
 from data.forms.register_form import RegisterForm
 from data.models.users import User
-from tools.scheme_list import SCHEME_LIST
-from tools.service_files import return_files, create_tuple, SERVER_URL, get_comments
-from tools.sqlite import return_scheme_id, return_min_max_size, return_price, return_material_id, calculate_total_price
+from error import error_handlers
+from tools.scheme_list import SCHEME_LIST, VIDEO_LIST
+from tools.service_files import return_files, create_tuple, SERVER_URL, get_comments, handle_models, colors_ids, \
+    materials
+from tools.sqlite import return_scheme_id, return_min_max_size, calculate_total_price
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 api_init = Api(app)
 API_PREFIX = 'api'
+
+error_handlers(app)
 
 api_init.add_resource(UsersResource, f'/{API_PREFIX}/users/<int:user_id>')
 api_init.add_resource(UsersListResource, f'/{API_PREFIX}/users')
@@ -31,7 +35,7 @@ login_manager.init_app(app)
 
 
 @app.context_processor
-def inject_schemes():
+def inject():
     # Передаем список во все шаблоны
     return {"scheme_list": SCHEME_LIST, "css_url": url_for('static', filename='css/scheme.css')}
 
@@ -47,16 +51,6 @@ def load_user(user_id):
 def logout():
     logout_user()
     return redirect('/')
-
-
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template('error.html'), 404
-
-
-@app.errorhandler(500)
-def internal_error(error):
-    return render_template('500.html'), 500
 
 
 @app.route('/delete_comment/<int:comment_id>,<image_id>')
@@ -99,6 +93,8 @@ def index():
 
 @app.route('/scheme/<image_id>', methods=['GET', 'POST'])
 def scheme_details(image_id):
+    if image_id not in SCHEME_LIST:
+        abort(404)
     form = CommentForm()
     if request.method == 'POST' and form.validate_on_submit():
         post(f'{SERVER_URL}/api/comments', json={
@@ -109,9 +105,11 @@ def scheme_details(image_id):
     comments = get_comments(image_id)
     css_file = url_for('static', filename='css/scheme.css')
     image_list = ['/'.join(i.split("/")[1:]) for i in return_files(f'static/img/carousel/{image_id}')]
-    return render_template('details.html', title=f'Схема {image_id}', css_url=css_file, image_id=image_id,
-                           image_list=image_list, comments=comments, form=form,
-                           count_comments=len(comments))
+    video_link = f's{image_id}.mp4' if f's{image_id}.mp4' in VIDEO_LIST else 'Для этой схемы пока не сняли видео'
+    data = {'title': f"Схема {image_id}", 'form': form,
+            'css_url': css_file, 'image_id': image_id, 'image_list': image_list, 'video_link': video_link,
+            'comments': comments, "count_comments": len(comments)}
+    return render_template('details.html', **data)
 
 
 @app.route('/calculate/<scheme>', methods=['GET', 'POST'])
@@ -124,7 +122,7 @@ def calculate(scheme):
     scheme_limits = {'min_width': min_size[0], 'max_width': max_size[0]} if scheme_id else None
     form = CalculateFrom(scheme_limits=scheme_limits)
     if form.validate_on_submit():
-        data = {
+        form_data = {
             'width': form.width.data,
             'height': form.height.data,
             'material': int(form.materials.data),
@@ -134,8 +132,15 @@ def calculate(scheme):
             'portal_color': form.color.data,
             'scheme_id': scheme_id
         }
-        price = str(calculate_total_price(data))
-        return price
+
+        price = str(calculate_total_price(form_data)) + '₽'
+
+        parameters = {"Ширина": form_data['width'], 'Длина': form_data['height'],
+                      'Модель ручки': handle_models[form_data['handle_models']],
+                      "Цвет ручки": colors_ids[form_data['handle_color']], "Материал": materials[form_data['material']]}
+        data = {'parameters': parameters, 'scheme': scheme, 'price': price,
+                'css_url': url_for('static', filename='css/calculated_result.css'), }
+        return render_template('calculated_result.html', **data)
 
     data = {"scheme": scheme, "scheme_id": scheme_id, "form": form,
             'css_url': url_for('static', filename='css/calculate.css'), 'min_size': min_size, 'max_size': max_size}

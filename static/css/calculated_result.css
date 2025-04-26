@@ -1,0 +1,10 @@
+@import url('style.css');
+.menu-bar{ /*чтобы было видно меню*/
+    opacity: 1;
+    visibility: visible;
+
+}
+
+.result-info{
+    text-align: center;
+}
