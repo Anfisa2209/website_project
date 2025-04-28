@@ -7,10 +7,16 @@ margin-left:20px;
     visibility: visible;
 
 }
-/*.carousel_images{
-    max-width:600px;
-    height:auto;
-}*/
+.scheme-text {
+    font-size:18px;
+    white-space: pre-line;
+    width:95%;
+    word-wrap: break-word;
+    margin:25px;
+    tab-size: 4;
+    /*background-color:#dbc791;*/
+    border-radius:6px;
+}
 .comment {
     padding: 15px;
     margin: 15px;

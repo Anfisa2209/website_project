@@ -104,11 +104,15 @@ def scheme_details(image_id):
         return redirect(f'/scheme/{image_id}')
     comments = get_comments(image_id)
     css_file = url_for('static', filename='css/scheme.css')
+    try:
+        text_scheme = open(f'static/infos/schemes_text/{image_id}.txt', encoding='utf-8').read()
+    except FileNotFoundError:
+        text_scheme = "К сожалению, текста для это схемы у нас еще нет..."
     image_list = ['/'.join(i.split("/")[1:]) for i in return_files(f'static/img/carousel/{image_id}')]
     video_link = f's{image_id}.mp4' if f's{image_id}.mp4' in VIDEO_LIST else 'Для этой схемы пока не сняли видео'
     data = {'title': f"Схема {image_id}", 'form': form,
             'css_url': css_file, 'image_id': image_id, 'image_list': image_list, 'video_link': video_link,
-            'comments': comments, "count_comments": len(comments)}
+            'comments': comments, "count_comments": len(comments), 'text_scheme': text_scheme}
     return render_template('details.html', **data)
 
 
