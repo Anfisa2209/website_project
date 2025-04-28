@@ -109,7 +109,7 @@ def scheme_details(image_id):
     except FileNotFoundError:
         text_scheme = "К сожалению, текста для это схемы у нас еще нет..."
     image_list = ['/'.join(i.split("/")[1:]) for i in return_files(f'static/img/carousel/{image_id}')]
-    video_link = f's{image_id}.mp4' if f's{image_id}.mp4' in VIDEO_LIST else 'Для этой схемы пока не сняли видео'
+    video_link = VIDEO_LIST.get(image_id, 'Video Not Found')
     data = {'title': f"Схема {image_id}", 'form': form,
             'css_url': css_file, 'image_id': image_id, 'image_list': image_list, 'video_link': video_link,
             'comments': comments, "count_comments": len(comments), 'text_scheme': text_scheme}
