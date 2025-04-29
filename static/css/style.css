@@ -3,7 +3,7 @@
   background-color: hsl(34, 35%, 68%);
 }
 *{
-font-family: Century Schoolbook, Calibri}
+font-family: Comic Sans MS,Bahnschrift Light, Century Schoolbook, Calibri}
 a {
 text-decoration:none;
 color:brown;}
@@ -21,7 +21,7 @@ main {
 
 .text {
     font-size: 20px;
-    font-family: Jokerman;
+    font-family: Comic Sans MS;
     background: #dbc791;
     width:100%;
     margin-left:5px;
@@ -58,7 +58,7 @@ main {
 }
 .title span {
 
-  font-family:Jokerman;}
+  font-family: Comic Sans MS;}
 .btn.btn-warning{
     font-size:20px;
 }

@@ -62,11 +62,16 @@
     animation: decrease 5s var(--animation-time)ease-out forwards;}
 
 .text-at-start-info pre {
-    float: left;
-    word-break:normal;
-    width:100%;
-
-}
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        padding: 10px;
+        margin: 0;
+        float: none !important;
+        font-size: 20px;
+        line-height: 1.4;
+        tab-size: 2;
+    }
 
 .bottomleft {
   position: absolute;
@@ -75,6 +80,27 @@
   font-size: 3vw;
   color:white;
 }
+@media (max-width: 600px) {
+    .image-container {
+        flex-direction: column;
+    }
+
+    .image-container img {
+        width:100% !important; /* Полная ширина экрана */
+        height:auto;
+    }
+
+    .bottomleft {
+        font-size: 40px;
+        left: 8px;
+        bottom: 4px;
+    }
+
+    .image-container a {
+        width: 100%;
+    }
+}
+
 /*Анимации:*/
 
 @keyframes decrease{

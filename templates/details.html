@@ -4,7 +4,8 @@
 
 <div>
     <h1 >Схема {{ image_id }}</h1>
-    <div class="carousel_images" style="position: relative;">
+    <div class="parent">
+        <div class="carousel_images">
         <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
             {% for img in image_list %}
@@ -29,14 +30,19 @@
 
     </div>
     <div class="scheme-text">
-        {{text_scheme}}
+        <div class="text-block" style="padding:10px">
+            {{text_scheme}}
+        </div>
+
+    </div>
+
     </div>
     <div class="video-block">
         {% if video_link != "Video Not Found"%}
-        <div class="scheme-text" style="border-radius:5px;">
-            <h5>Вы можете посмотреть об этой схеме видео: </h5>
+        <div class="scheme-text" style="margin-bottom:5px">
+            <h5>Посмотрите видео про схему {{image_id}} (если видео не загружается, включите VPN): </h5>
         </div>
-            <iframe width="560" height="315" src="{{video_link}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe class="video-player" src="{{video_link}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         {% else %}
             <h3  class="scheme-text">
                 Для этой схемы мы еще не сняли видео. Но вы можете посетить <strong><a href="https://www.youtube.com/@HsPortal">наш канал</a></strong>.
