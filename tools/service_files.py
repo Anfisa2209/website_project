@@ -31,12 +31,12 @@ def create_tuple(data, n=2):
 
 
 def get_comments(scheme_name):
-    # возвращает все комментарии под определенной схемой
+    # возвращает все комментарии под определенной схемой или все, если указать all
     try:
         comments = []
         all_comments = get(f"{SERVER_URL}/api/comments").json()
         for comment in all_comments.get('comments'):
-            if comment['scheme_name'] == scheme_name:
+            if comment['scheme_name'] == scheme_name or scheme_name == 'all':
                 user_id = comment['user_id']
                 user = get(f"{SERVER_URL}/api/users/{user_id}").json()
                 if user:

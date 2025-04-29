@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    h5 {text-align:center}
+</style>
+<h5>Отзывы, которые оставляли пользователи:</h5>
+<div class="comment_section">
+        <div id="comments">
+            {% if not comments%}
+            <h5 style="padding:5px">Пока отзывов не оставляли...</h5>
+            {%else%}
+            {% for comment in comments %}
+                <div class="comment mb-3" data-comment-id="{{ comment['id'] }}">
+                    <div class="view-mode">
+                        <p><strong>{{ comment.user_name }}:</strong> <br><span class="comment-text">{{ comment.text }}</span></p>
+
+                    </div>
+                </div>
+            {% endfor %}
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}

@@ -209,6 +209,12 @@ def about_us():
     return render_template('about_creator.html', about_creator_text=about_creator_text)
 
 
+@app.route('/comments')
+def comments_list():
+    comments = get_comments('all')
+    return render_template('comments_list.html', comments=comments)
+
+
 def main():
     db_session.global_init('db/hs_portal.db')
     app.run(port=8080, host='127.0.0.1', debug=True)
