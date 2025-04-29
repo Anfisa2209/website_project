@@ -120,7 +120,8 @@ def scheme_details(image_id):
 def calculate(scheme):
     if scheme == "scheme":  # если схему не выбрали и перешли через меню
         return render_template('calculate.html', scheme_id=scheme, form=CalculateFrom(), min_size=(), max_size=())
-
+    if scheme not in SCHEME_LIST:
+        abort(404)
     scheme_id = return_scheme_id(scheme)
     min_size, max_size = return_min_max_size(scheme)
     scheme_limits = {'min_width': min_size[0], 'max_width': max_size[0]} if scheme_id else None
@@ -200,6 +201,12 @@ def profile():
         return abort(404)
     email = data['users'][0]['email']
     return render_template('profile.html', css_url=url_for('static', filename='css/profile.css'), email=email)
+
+
+@app.route('/about_us')
+def about_us():
+    about_creator_text = open('static/infos/about_creator.txt', encoding='utf8').read()
+    return render_template('about_creator.html', about_creator_text=about_creator_text)
 
 
 def main():
