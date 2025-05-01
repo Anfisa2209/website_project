@@ -1,7 +1,7 @@
 import os
 
 import requests.exceptions
-from requests import get
+from requests import get, delete
 
 SERVER_URL = 'http://127.0.0.1:8080'
 
@@ -41,7 +41,8 @@ def get_comments(scheme_name):
                 try:
                     user = get(f"{SERVER_URL}/api/users/{user_id}").json()
                 except requests.exceptions.JSONDecodeError:
-                    continue  # если нет пользователя с таким айди, пропускаем комментарий
+                    #  если пользователь удалил аккаунт, возвращаем такое:
+                    user = {'users': [{'name': 'Удаленный аккаунт'}]}
                 if user:
                     com = comment
                     com['user_name'] = user['users'][0]['name']
