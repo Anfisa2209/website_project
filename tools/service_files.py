@@ -38,7 +38,10 @@ def get_comments(scheme_name):
         for comment in all_comments.get('comments'):
             if comment['scheme_name'] == scheme_name or scheme_name == 'all':
                 user_id = comment['user_id']
-                user = get(f"{SERVER_URL}/api/users/{user_id}").json()
+                try:
+                    user = get(f"{SERVER_URL}/api/users/{user_id}").json()
+                except requests.exceptions.JSONDecodeError:
+                    continue  # если нет пользователя с таким айди, пропускаем комментарий
                 if user:
                     com = comment
                     com['user_name'] = user['users'][0]['name']

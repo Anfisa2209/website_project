@@ -57,7 +57,7 @@ def logout():
 @app.route('/delete_comment/<int:comment_id>,<image_id>')
 def delete_comment(comment_id, image_id):
     if delete(f'{SERVER_URL}/{API_PREFIX}/comments/{comment_id}').json().get("success"):
-        flash('Комментарий удален')
+        flash('Комментарий удален', 'success')
         return redirect(f'/scheme/{image_id}')
     return
 
@@ -76,7 +76,7 @@ def update_comment(comment_id):
                                                                   'user_id': user_id,
                                                                   'scheme_name': scheme_name})
     link = f'/scheme/{scheme_name}'
-    flash('Комментарий изменён')
+    flash('Комментарий изменён', 'success')
     return redirect(link)
 
 
@@ -224,7 +224,7 @@ def change_password(user_id):
         if new_password == old_password:
             return render_template('change_password.html', form=form,
                                    css_url=url_for('static', filename='css/login.css'),
-                                   password_message='Это ваш текуший пароль, придумайте другой')
+                                   password_message='Это ваш текущий пароль, придумайте другой')
         if new_password != repeat_password:
             return render_template('change_password.html', form=form,
                                    css_url=url_for('static', filename='css/login.css'),
@@ -235,6 +235,23 @@ def change_password(user_id):
         return redirect('/profile')
 
     return render_template('change_password.html', form=form, css_url=url_for('static', filename='css/login.css'))
+
+
+@app.route('/delete_account/<int:user_id>', methods=['POST'])
+@login_required
+def delete_account(user_id):
+    if current_user.id != user_id:
+        abort(403)
+
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).get(user_id)
+
+    db_sess.delete(user)
+    db_sess.commit()
+
+    logout_user()
+    flash('Ваш аккаунт был успешно удалён', 'info')
+    return redirect('/')
 
 
 @app.route('/about_us')
