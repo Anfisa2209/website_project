@@ -7,6 +7,7 @@ from api.comments.comment_resource import CommentsListResource, CommentsResource
 from api.users.users_resource import UsersResource, UsersListResource
 from data import db_session
 from data.forms.calculate_from import CalculateFrom
+from data.forms.change_password_form import ChangePasswordForm
 from data.forms.comment_form import CommentForm
 from data.forms.login_form import LoginForm
 from data.forms.register_form import RegisterForm
@@ -75,6 +76,7 @@ def update_comment(comment_id):
                                                                   'user_id': user_id,
                                                                   'scheme_name': scheme_name})
     link = f'/scheme/{scheme_name}'
+    flash('Комментарий изменён')
     return redirect(link)
 
 
@@ -142,7 +144,8 @@ def calculate(scheme):
 
         parameters = {"Ширина": form_data['width'], 'Длина': form_data['height'],
                       'Модель ручки': handle_models[form_data['handle_models']],
-                      "Цвет ручки": colors_ids[form_data['handle_color']], "Материал": materials[form_data['material']]}
+                      "Цвет ручки": colors_ids[form_data['handle_color']], "Материал": materials[form_data['material']],
+                      "Цвет портал": form_data['portal_color']}
         data = {'parameters': parameters, 'scheme': scheme, 'price': price,
                 'css_url': url_for('static', filename='css/calculated_result.css'), }
         return render_template('calculated_result.html', **data)
@@ -201,6 +204,37 @@ def profile():
         return abort(404)
     email = data['users'][0]['email']
     return render_template('profile.html', css_url=url_for('static', filename='css/profile.css'), email=email)
+
+
+@app.route('/change_password/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def change_password(user_id):
+    if current_user.id != user_id:
+        abort(403)
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        old_password, new_password, repeat_password = form.old_password.data, form.new_password.data, \
+                                                      form.repeat_new_password.data
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(user_id == User.id)[0]
+        if not user.check_password(old_password):
+            return render_template('change_password.html', form=form,
+                                   css_url=url_for('static', filename='css/login.css'),
+                                   old_password_message='Неверный старый пароль')
+        if new_password == old_password:
+            return render_template('change_password.html', form=form,
+                                   css_url=url_for('static', filename='css/login.css'),
+                                   password_message='Это ваш текуший пароль, придумайте другой')
+        if new_password != repeat_password:
+            return render_template('change_password.html', form=form,
+                                   css_url=url_for('static', filename='css/login.css'),
+                                   password_message='Пароли не совпадают')
+        user.set_password(new_password)
+        db_sess.commit()
+        flash('Пароль успешно изменён!', 'success')
+        return redirect('/profile')
+
+    return render_template('change_password.html', form=form, css_url=url_for('static', filename='css/login.css'))
 
 
 @app.route('/about_us')

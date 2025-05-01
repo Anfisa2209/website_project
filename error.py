@@ -7,7 +7,7 @@ def error_handlers(app):
         return render_template('error.html', error_message="Вы не зарегистрированы!"), 403
 
     @app.errorhandler(403)
-    def internal_error(error):
+    def access_error(error):
         return render_template('error.html', error_message="Вам сюда нельзя! Доступ запрещен..."), 403
 
     @app.errorhandler(404)
