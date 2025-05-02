@@ -283,6 +283,23 @@ def comments_list():
     return render_template('comments_list.html', comments=comments)
 
 
+@app.route('/projects')
+def projects():
+    project_photo_path = './static/img/projects'
+    photo_dirs_list = return_dirs(project_photo_path)
+    text_files_list = return_files('./static/infos/projects_text')
+
+    # словарь с фотографиями для каждого проекта
+    projects_dict = {f'project_{i}': return_files(path) for i, path in enumerate(photo_dirs_list, 1)}
+    # словарь с текстами для каждого проекта
+    project_text_dict = {f'project_{i}': open(path, encoding='utf-8').read() for i, path in
+                         enumerate(text_files_list, 1)}
+    projects_titles = ["Engawa", "Шкаф  для книг и ценных коллекций"]
+    return render_template('projects.html', projects_dict=projects_dict, projects_titles=projects_titles,
+                           project_text_dict=project_text_dict,
+                           css_url=url_for('static', filename='css/project_content.css'))
+
+
 def main():
     db_session.global_init('db/hs_portal.db')
     app.run(port=8080, host='127.0.0.1', debug=True)

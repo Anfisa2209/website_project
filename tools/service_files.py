@@ -21,6 +21,11 @@ def return_files(path):
     return file_list
 
 
+def return_dirs(path):
+    #  возвращает все директории в папке с указанным путем
+    return [currentdir for currentdir, dirs, files in os.walk(path) if currentdir != path]
+
+
 def create_tuple(data, n=2):
     # возвращает список кортежей
     result = []

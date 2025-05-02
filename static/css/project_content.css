@@ -1,0 +1,60 @@
+@import url('style.css');
+
+.menu-bar{
+    opacity: 1;
+    visibility: visible;
+
+}
+
+.project_content {
+    background-color: #ebe5ae;
+    border-radius:10px;
+    width: 80%;
+    margin: 25px auto;
+    padding: 20px;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+}
+
+.project-title {
+    text-align: center;
+    grid-column: 1 / -1;
+}
+
+.project-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: start;
+
+}
+
+.carousel-container {
+    width: 100%;
+    max-width: 800px;
+
+}
+
+.project-text {
+    padding-left: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    white-space: pre-line;
+    margin: 0;
+    line-height: 1.4;
+
+}
+
+@media (max-width: 768px) {
+    .project-body {
+        grid-template-columns: 1fr;
+    }
+
+    .project_content {
+        width: 95%;
+        margin: 15px auto;
+    }
+}

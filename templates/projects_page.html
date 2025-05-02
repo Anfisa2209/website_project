@@ -12,7 +12,6 @@
     </div>
 
     {% for imgs in scheme_images %}
-        {% set cur_tuple = loop.index - 1 %}
         <div class="image-container">
             {% for i in imgs %}
             {% set scheme_id =  i.split('.')[0] %}
