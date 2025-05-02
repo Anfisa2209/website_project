@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, redirect, abort, request, flash
 from flask_login import LoginManager, login_required, logout_user, login_user, current_user
 from flask_restful import Api
-from requests import get, post, delete, put
+from requests import post, put
 
 from api.comments.comment_resource import CommentsListResource, CommentsResource
 from api.users.users_resource import UsersResource, UsersListResource
@@ -14,9 +14,9 @@ from data.forms.register_form import RegisterForm
 from data.models.users import User
 from error import error_handlers
 from tools.scheme_list import SCHEME_LIST, VIDEO_LIST
-from tools.service_files import return_files, create_tuple, SERVER_URL, get_comments, handle_models, colors_ids, \
-    materials
-from tools.sqlite import return_scheme_id, return_min_max_size, calculate_total_price
+from tools.service_files import *
+from tools.sqlite import return_scheme_id, return_min_max_size, calculate_total_price, add_order, \
+    return_orders_by_user_id
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -56,6 +56,9 @@ def logout():
 
 @app.route('/delete_comment/<int:comment_id>,<image_id>')
 def delete_comment(comment_id, image_id):
+    comment = get(f"{SERVER_URL}/{API_PREFIX}/comments/{comment_id}").json()
+    if comment['comments'][0]['user_id'] != current_user.id:
+        abort(403)
     if delete(f'{SERVER_URL}/{API_PREFIX}/comments/{comment_id}').json().get("success"):
         flash('Комментарий удален', 'success')
         return redirect(f'/scheme/{image_id}')
@@ -148,6 +151,10 @@ def calculate(scheme):
                       "Цвет портал": form_data['portal_color']}
         data = {'parameters': parameters, 'scheme': scheme, 'price': price,
                 'css_url': url_for('static', filename='css/calculated_result.css'), }
+        if current_user.is_authenticated:
+            order_data = form_data
+            order_data['price'], order_data['scheme_id'], order_data['user_id'] = price, scheme, current_user.id
+            add_order(order_data)
         return render_template('calculated_result.html', **data)
 
     data = {"scheme": scheme, "scheme_id": scheme_id, "form": form,
@@ -204,6 +211,16 @@ def profile():
         return abort(404)
     email = data['users'][0]['email']
     return render_template('profile.html', css_url=url_for('static', filename='css/profile.css'), email=email)
+
+
+@app.route('/profile/orders/<int:user_id>')
+@login_required
+def orders(user_id):
+    if current_user.id != user_id:
+        abort(403)
+    orders_list = return_orders_by_user_id(current_user.id)
+    css_file = url_for('static', filename='css/profile.css')
+    return render_template("orders.html", css_url=css_file, orders_list=orders_list)
 
 
 @app.route('/change_password/<int:user_id>', methods=['GET', 'POST'])

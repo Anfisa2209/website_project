@@ -13,7 +13,9 @@
             {% for comment in comments %}
                 <div class="comment mb-3" data-comment-id="{{ comment['id'] }}">
                     <div class="view-mode">
-                        <p><strong>{{ comment.user_name }}:</strong> <br><span class="comment-text">{{ comment.text }}</span></p>
+                        <p><strong>{{ comment.user_name }}:</strong>
+                        <br><span class="comment-text">{{ comment.text }}</span><br>
+                            <a href="/scheme/{{comment.scheme_name}}">Комментарий оставлен под схемой {{comment.scheme_name}}</a></p>
 
                     </div>
                 </div>

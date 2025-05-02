@@ -1,0 +1,40 @@
+{% extends "profile.html" %}
+
+{% block main_content %}
+<div class="user-data">
+    {% if not orders_list %}
+        <h2>У вас еще нет расчетов</h2>
+    {% else %}
+    <table class="table table-bordered">
+
+    <thead><tr>
+            <th colspan="10">Ваши расчеты</th>
+        </tr></thead>
+
+        <tbody>
+        <tr>
+          <th scope="col">№</th>
+          <th scope="col">Ширина</th>
+          <th scope="col">Длина</th>
+          <th scope="col">Материал</th>
+          <th scope="col">Стеклопакет</th>
+          <th scope="col">Цвет ручки</th>
+          <th scope="col">Модель ручки</th>
+          <th scope="col">Цвет портала</th>
+          <th scope="col">Схема</th>
+          <th scope="col">Стоимость</th>
+        </tr>
+        {% for order in orders_list%}
+            <tr>
+                <th scope="row">{{loop.index}}</th>
+                {% for elem in order%}
+                    <td>{{ elem }}</td>
+                {% endfor%}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+</div>
+{% endblock main_content %}

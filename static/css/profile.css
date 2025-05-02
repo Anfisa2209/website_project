@@ -4,6 +4,46 @@
     visibility: visible;
 
 }
-.btn-btn-danger{
-    font-family:Calibri;
+.table thead th {
+        font-size: 20px; /* Размер шрифта */
+        text-align: center; /* Выравнивание по центру */
+    }
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    padding: 10px;
+    margin: 15px;
+    border-radius: 5px;
+}
+.user-data {margin:10px}
+.user-buttons{display:grid;width:150px}
+
+.profile-container {
+    display: grid;
+    grid-template-columns: 500px auto;
+}
+
+.option-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    width:400px;
+    margin-left:25px;
+    background-color:#e8ddc5;
+    border-radius:10px;
+}
+
+.btn.btn-warning, .btn.btn-danger {
+    width:200px;
+    height:60px;
+    margin:5px;
+    font-size:20px;
+
+    margin-left:25%;
+    text-align:center;
+
 }

@@ -2,6 +2,8 @@ from pathlib import Path
 import sqlite3
 
 # Путь к tools/sqlite.py
+from tools.service_files import materials, handle_models, colors_ids
+
 current_dir = Path(__file__).parent
 db_path = current_dir.parent / "db" / "portal_data.db"
 
@@ -59,3 +61,30 @@ def calculate_total_price(data: dict):
     handle_number = cursor.execute('SELECT door_number FROM Portals WHERE id = ?', (scheme_id,)).fetchone()[0]
     total_price += 10000 * handle_number if handle_model_id == 2 else 0
     return int(total_price)
+
+
+def add_order(data: dict):
+    request = """INSERT INTO Orders
+    (width, height, material_id, steklopaket_id, handle_color_id, handle_model_id, portal_color, price, scheme, user_id)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+    cursor.execute(request, (*data.values(),))
+    connect.commit()
+
+
+def return_orders_by_user_id(user_id):
+    request = """
+    SELECT width, height, material_id, steklopaket_id, handle_color_id, handle_model_id, portal_color, price, scheme
+    FROM Orders
+    WHERE user_id = ?
+    """
+    orders = cursor.execute(request, (user_id,))
+    if not orders:
+        return []
+    result = []
+    for order in orders.fetchall():
+        width, height, material_id, glass_id, handle_color_id, handle_model_id, portal_color, price, scheme = order
+        material, handle_color, handle_model = materials[material_id], colors_ids[handle_color_id], handle_models[
+            handle_model_id]
+        glass = 'односторонний' if glass_id == 1 else 'двусторонний'
+        result.append((width, height, material, glass, handle_color, handle_model, portal_color, price, scheme))
+    return result
