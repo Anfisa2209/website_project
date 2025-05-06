@@ -1,0 +1,25 @@
+{% extends "index.html" %}
+
+{% block content %}
+<table class="table table-bordered">
+
+    <thead><tr>
+            <th colspan="10">Пользователи</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Имя</th>
+          <th scope="col">Email</th>
+        </tr>
+        {% for user in users_list%}
+            <tr>
+                <td>{{user['id']}}</td>
+                <td>{{ user['name'] }}</td>
+                <td>{{ user['email'] }}</td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

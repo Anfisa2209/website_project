@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_required, logout_user, login_user, c
 from flask_restful import Api
 from requests import post, put
 
+from admin.routes import admin_bp
 from api.comments.comment_resource import CommentsListResource, CommentsResource
 from api.users.users_resource import UsersResource, UsersListResource
 from data import db_session
@@ -20,6 +21,7 @@ from tools.sqlite import return_scheme_id, return_min_max_size, calculate_total_
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.register_blueprint(admin_bp)
 
 api_init = Api(app)
 API_PREFIX = 'api'
@@ -157,7 +159,7 @@ def calculate(scheme):
             add_order(order_data)
         return render_template('calculated_result.html', **data)
 
-    data = {"scheme": scheme, "scheme_id": scheme_id, "form": form,
+    data = {"title": f'расчет схемы {scheme}', "scheme": scheme, "scheme_id": scheme_id, "form": form,
             'css_url': url_for('static', filename='css/calculate.css'), 'min_size': min_size, 'max_size': max_size}
     return render_template('calculate.html', **data)
 
@@ -210,7 +212,8 @@ def profile():
     if not data.get('users'):
         return abort(404)
     email = data['users'][0]['email']
-    return render_template('profile.html', css_url=url_for('static', filename='css/profile.css'), email=email)
+    return render_template('profile.html', css_url=url_for('static', filename='css/profile.css'), email=email,
+                           title='Профиль')
 
 
 @app.route('/profile/orders/<int:user_id>')
@@ -220,7 +223,7 @@ def orders(user_id):
         abort(403)
     orders_list = return_orders_by_user_id(current_user.id)
     css_file = url_for('static', filename='css/profile.css')
-    return render_template("orders.html", css_url=css_file, orders_list=orders_list)
+    return render_template("orders.html", css_url=css_file, orders_list=orders_list, title='Ваши расчеты')
 
 
 @app.route('/change_password/<int:user_id>', methods=['GET', 'POST'])
@@ -274,13 +277,13 @@ def delete_account(user_id):
 @app.route('/about_us')
 def about_us():
     about_creator_text = open('static/infos/about_creator.txt', encoding='utf8').read()
-    return render_template('about_creator.html', about_creator_text=about_creator_text)
+    return render_template('about_creator.html', about_creator_text=about_creator_text, title='О создателе')
 
 
 @app.route('/comments')
 def comments_list():
     comments = get_comments('all')
-    return render_template('comments_list.html', comments=comments)
+    return render_template('comments_list.html', comments=comments, title='Комментарии')
 
 
 @app.route('/projects')
@@ -297,7 +300,7 @@ def projects():
     projects_titles = ["Engawa", "Шкаф  для книг и ценных коллекций"]
     return render_template('projects.html', projects_dict=projects_dict, projects_titles=projects_titles,
                            project_text_dict=project_text_dict,
-                           css_url=url_for('static', filename='css/project_content.css'))
+                           css_url=url_for('static', filename='css/project_content.css'), title='Проекты')
 
 
 def main():
