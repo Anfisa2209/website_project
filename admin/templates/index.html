@@ -10,12 +10,22 @@
     <title>Админ-панель</title>
 </head>
 <body>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 <div class="container">
     <div class="option-section">
+        <a class="btn btn-warning" href="/">Вернуться на сайт</a>
         <a class="btn btn-warning" href="/admin/users">Пользователи</a>
         <a class="btn btn-warning" href="/admin/comments">Комментарии</a>
         <a class="btn btn-warning" href="/admin/texts">Тексты</a>
-        <a class="btn btn-warning" href="/admin/add_project">Проекты</a>
+        <a class="btn btn-warning" href="/admin/projects">Проекты</a>
     </div>
     {% block content %}{% endblock %}
 </div>

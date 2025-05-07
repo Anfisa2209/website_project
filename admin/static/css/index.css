@@ -40,3 +40,13 @@
     text-align:center;
 
 }
+
+#textField .form-control {
+  width: 600px !important;
+  min-height: 230px;
+  resize: vertical;
+}
+
+#textField {
+  max-width: 800px;
+}

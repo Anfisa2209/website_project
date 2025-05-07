@@ -3,7 +3,8 @@
 {% block content %}
 {% if current_user.is_admin%}
 <div class="row justify-content-center">
-    <a class="btn btn-warning" href="/admin/add_project" style="width:200px">Добавить проект</a>
+    <a class="btn btn-warning" href="/admin/add_project" style="width:200px;margin-right:20px">Добавить проект</a>
+    <a class="btn btn-warning" href="/admin/edit_project" style="width:200px">Изменить проект</a>
 </div>
 {% endif %}
 {% if projects_dict and projects_titles%}

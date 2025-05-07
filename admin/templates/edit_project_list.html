@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<h1>Проекты:</h1>
+<div class="list-group">
+    {% for project in projects_list%}
+  <a href="/admin/edit_project/{{project['id']}}" class="list-group-item list-group-item-action">{{project['name']}}</a>
+    {% endfor %}
+
+</div>
+{% endblock %}
