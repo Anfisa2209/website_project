@@ -5,6 +5,7 @@ from requests import post, put
 
 from admin.routes import admin_bp
 from api.comments.comment_resource import CommentsListResource, CommentsResource
+from api.projects.project_resource import ProjectsResource, ProjectsListResource
 from api.users.users_resource import UsersResource, UsersListResource
 from data import db_session
 from data.forms.calculate_from import CalculateFrom
@@ -21,6 +22,7 @@ from tools.sqlite import return_scheme_id, return_min_max_size, calculate_total_
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Максимальный размер файла
 app.register_blueprint(admin_bp)
 
 api_init = Api(app)
@@ -32,6 +34,9 @@ api_init.add_resource(UsersResource, f'/{API_PREFIX}/users/<int:user_id>')
 api_init.add_resource(UsersListResource, f'/{API_PREFIX}/users')
 api_init.add_resource(CommentsListResource, f'/{API_PREFIX}/comments')
 api_init.add_resource(CommentsResource, f'/{API_PREFIX}/comments/<int:comment_id>')
+
+api_init.add_resource(ProjectsListResource, f'/{API_PREFIX}/projects')
+api_init.add_resource(ProjectsResource, f'/{API_PREFIX}/projects/<int:project_id>')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -289,15 +294,15 @@ def comments_list():
 @app.route('/projects')
 def projects():
     project_photo_path = './static/img/projects'
-    photo_dirs_list = return_dirs(project_photo_path)
-    text_files_list = return_files('./static/infos/projects_text')
+    photo_dirs_list = return_dirs(project_photo_path)  # возвращает все директории в папке ./static/img/projects
+    text_files_list = return_files('./static/infos/projects_text') # возвращает все тексты
 
     # словарь с фотографиями для каждого проекта
     projects_dict = {f'project_{i}': return_files(path) for i, path in enumerate(photo_dirs_list, 1)}
     # словарь с текстами для каждого проекта
     project_text_dict = {f'project_{i}': open(path, encoding='utf-8').read() for i, path in
                          enumerate(text_files_list, 1)}
-    projects_titles = ["Engawa", "Шкаф  для книг и ценных коллекций"]
+    projects_titles = get(f"{SERVER_URL}/api/projects").json().get('projects', [])
     return render_template('projects.html', projects_dict=projects_dict, projects_titles=projects_titles,
                            project_text_dict=project_text_dict,
                            css_url=url_for('static', filename='css/project_content.css'), title='Проекты')

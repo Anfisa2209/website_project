@@ -1,0 +1,46 @@
+{% extends "index.html" %}
+
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="input-wrapper">
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(class="form-control") }}
+            <i class="fa-regular fa-user input-icon"></i><br>
+            {% for error in form.name.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endfor %}
+        </p>
+    </div>
+
+    <div class="input-wrapper">
+        <p>
+            {{ form.project_text.label }}<br>
+            {{ form.project_text(class="form-control") }}
+            <i class="fa-solid fa-lock input-icon"></i><br>
+            {% for error in form.project_text.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endfor %}
+        </p>
+    </div>
+    <div class="input-wrapper">
+        <p>
+            {{ form.image_photo.label }}<br>
+            {{ form.image_photo(class="form-control") }}
+            <i class="fa-solid fa-lock input-icon"></i><br>
+            {% for error in form.image_photo.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endfor %}
+        </p>
+    </div>
+
+    <p>{{ form.submit(type="submit", class="btn btn-warning") }}</p>
+</form>
+{% endblock %}

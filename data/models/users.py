@@ -13,6 +13,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     email = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=False)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    is_admin = sqlalchemy.Column(sqlalchemy.Boolean, default=False, nullable=False)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     comment = orm.relationship("Comments", back_populates='user')
 
