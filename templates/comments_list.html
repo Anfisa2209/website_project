@@ -16,6 +16,9 @@
                         <p><strong>{{ comment.user_name }}:</strong>
                         <br><span class="comment-text">{{ comment.text }}</span><br>
                             <a href="/scheme/{{comment.scheme_name}}">Комментарий оставлен под схемой {{comment.scheme_name}}</a></p>
+                        {% if current_user.is_admin%}
+                             <a href="/delete_comment/{{comment.id}},{{comment.scheme_name}}" class="btn btn-sm btn-danger">Удалить</a>
+                        {% endif %}
 
                     </div>
                 </div>

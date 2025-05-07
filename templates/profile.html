@@ -17,6 +17,9 @@
         <a class="btn btn-warning" href="/profile">Профиль</a>
         <a class="btn btn-warning" href="/profile/orders/{{current_user.id}}">Расчеты</a>
         <a class="btn btn-warning" href="/calculate/scheme">Рассчитать</a>
+        {% if current_user.is_admin %}
+             <a class="btn btn-warning" href="/admin">Админ панель</a>
+        {% endif %}
         <a class="btn btn-danger" href="/logout">Выйти</a>
         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" >
             Удалить аккаунт

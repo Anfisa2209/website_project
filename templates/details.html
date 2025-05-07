@@ -93,9 +93,12 @@
                     <!-- Режим просмотра -->
                     <div class="view-mode">
                         <p><strong>{{ comment.user_name }}:</strong> <br><span class="comment-text">{{ comment.text }}</span></p>
-                        {% if current_user.is_authenticated and comment.user_id == current_user.id %}
-                            <button class="btn btn-sm btn-light edit-comment">Изменить</button>
+                        {% if current_user.is_authenticated and comment.user_id == current_user.id or current_user.is_admin%}
+                          {% if not current_user.is_admin%} <!--   Админ не может редактировать комментарий-->
+                                <button class="btn btn-sm btn-light edit-comment">Изменить</button>
+                             {% endif %}
                             <a href="/delete_comment/{{comment.id}},{{image_id}}" class="btn btn-sm btn-danger">Удалить</a>
+
                         {% endif %}
                     </div>
 

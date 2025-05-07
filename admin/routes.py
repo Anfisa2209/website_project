@@ -6,7 +6,7 @@ from requests import get, post, put
 from werkzeug.utils import secure_filename
 
 from data.forms.project_form import ProjectForm
-from tools.service_files import SERVER_URL
+from tools.service_files import SERVER_URL, get_comments
 
 admin_bp = Blueprint('admin', __name__, template_folder='templates', static_folder='static',
                      static_url_path='/admin/static', url_prefix='/admin')
@@ -58,10 +58,8 @@ def users():
 
 @admin_bp.route('/comments')
 def comments():
-    users_list = get(f"{SERVER_URL}/api/users").json()
-    if not users_list.get('users'):
-        return abort(404)
-    return 'comments'
+    # так как уже есть страница с комментариями, просто переходим туда
+    return redirect('/comments')
 
 
 @admin_bp.route('/texts')
