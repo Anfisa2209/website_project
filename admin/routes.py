@@ -1,12 +1,13 @@
 import os
+import shutil
 
 from flask import Blueprint, render_template, redirect, abort, flash
 from flask_login import login_required, current_user
-from requests import get, post, put
+from requests import get, post, put, delete
 from werkzeug.utils import secure_filename
 
 from data.forms.project_form import ProjectForm
-from tools.service_files import SERVER_URL, get_comments
+from tools.service_files import SERVER_URL
 
 admin_bp = Blueprint('admin', __name__, template_folder='templates', static_folder='static',
                      static_url_path='/admin/static', url_prefix='/admin')
@@ -103,21 +104,53 @@ def edit_project_by_id(project_id):
         with open(f'./static/infos/projects_text/project_{project_id}.txt', mode='w', encoding='utf8') as text_file:
             text_file.write(form.project_text.data)
         file = form.image_photo.data
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            #  добавляет фото в существующую папку
-            directory = f'./static/img/projects/project_{project_id}'
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-            filepath = os.path.join(directory, filename)
-            file.save(filepath)
-        else:
-            flash('Недопустимый тип файла', 'info')
-            return render_template('add_project.html', form=form)
+        if file:
+            if allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                #  добавляет фото в существующую папку
+                directory = f'./static/img/projects/project_{project_id}'
+                if not os.path.exists(directory):
+                    os.makedirs(directory)
+                filepath = os.path.join(directory, filename)
+                file.save(filepath)
+            else:
+                flash('Недопустимый тип файла', 'info')
+                return render_template('add_project.html', form=form)
         if result.status_code == 200:
             flash('Изменения успешно внесены', 'success')
             return redirect('/admin')
     project_name = project.json()['projects'][0]['name']
     form.name.data = project_name
     form.project_text.data = open(f'./static/infos/projects_text/project_{project_id}.txt', encoding='utf8').read()
-    return render_template('add_project.html', form=form)
+    return render_template('add_project.html', form=form, project_id=project_id)
+
+
+@admin_bp.route('/delete_project/<int:project_id>')
+def delete_project(project_id):
+    project = get(f"{SERVER_URL}/api/projects/{project_id}")
+    if project.status_code != 200:
+        abort(404)
+    project_name = project.json()['projects'][0]['name']
+
+    result = delete(f"{SERVER_URL}/api/projects/{project_id}")
+    if result.status_code == 200:
+        # Пути к файлам и папкам
+        img_dir = f'./static/img/projects/project_{project_id}'
+        txt_file = f'./static/infos/projects_text/project_{project_id}.txt'
+
+        try:
+            # Удаляем папку с изображениями (если существует)
+            if os.path.exists(img_dir):
+                shutil.rmtree(img_dir)
+
+            if os.path.exists(txt_file):
+                os.remove(txt_file)
+
+            flash(f'Проект "{project_name.capitalize()}" успешно удалён', 'info')
+        except Exception as e:
+            flash(f'Ошибка при удалении файлов: {str(e)}', 'danger')
+
+        return redirect('/admin')
+
+    flash(f'Не удалось удалить проект {project_name}', 'danger')
+    return redirect('/admin')
