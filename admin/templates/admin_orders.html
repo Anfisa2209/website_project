@@ -1,0 +1,60 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="user-data">
+    {% if not orders_list %}
+        <h2>Пользователи еще не производили расчеты</h2>
+    {% else %}
+    <table class="table table-bordered">
+
+    <thead><tr>
+            <th colspan="10">Все расчеты</th>
+        </tr></thead>
+
+        <tbody>
+        <tr>
+          <th scope="col">Пользователь</th>
+          <th scope="col">Ширина</th>
+          <th scope="col">Длина</th>
+          <th scope="col">Материал</th>
+          <th scope="col">Стеклопакет</th>
+          <th scope="col">Цвет ручки</th>
+          <th scope="col">Модель ручки</th>
+          <th scope="col">Цвет портала</th>
+          <th scope="col">Схема</th>
+          <th scope="col">Стоимость</th>
+        </tr>
+        {% for order in orders_list%}
+            <tr>
+                {% for elem in order%}
+                    <td>{{ elem }}</td>
+                {% endfor%}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    <div class="statistic">
+    <script src="https://www.google.com/jsapi"></script>
+    <div id="schemeDiagram" style="width: 500px; height: 400px; float:bottom"></div>
+    <script>
+   google.load("visualization", "1", {packages:["corechart"]});
+   google.setOnLoadCallback(drawChart);
+   function drawChart() {
+    var data = google.visualization.arrayToDataTable({{ diagram_data | tojson }});
+    var options = {
+     title: 'Популярные схемы',
+     is3D: true,
+     pieResidueSliceLabel: 'Остальное'
+    };
+    var chart = new google.visualization.PieChart(document.getElementById('schemeDiagram'));
+     chart.draw(data, options);
+   }
+  </script>
+</div>
+
+</div>
+
+
+
+{% endblock %}

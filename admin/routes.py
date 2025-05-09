@@ -10,6 +10,7 @@ from data.forms.edit_text_form import EditTextForm
 from data.forms.project_form import ProjectForm
 from tools.scheme_list import TEXTS_LIST, SCHEME_LIST
 from tools.service_files import SERVER_URL
+from tools.sqlite import return_all_orders, popular_scheme
 
 admin_bp = Blueprint('admin', __name__, template_folder='templates', static_folder='static',
                      static_url_path='/admin/static', url_prefix='/admin')
@@ -48,7 +49,9 @@ def check_admin():
 
 @admin_bp.route('/')
 def dashboard():
-    return render_template('index.html')
+    orders_list = return_all_orders()
+    diagram_data = [['Схема', 'Количество']] + popular_scheme()
+    return render_template('admin_orders.html', orders_list=orders_list, diagram_data=diagram_data)
 
 
 @admin_bp.route('/users')

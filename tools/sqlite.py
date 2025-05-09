@@ -2,7 +2,9 @@ from pathlib import Path
 import sqlite3
 
 # Путь к tools/sqlite.py
-from tools.service_files import materials, handle_models, colors_ids
+from requests import get
+
+from tools.service_files import materials, handle_models, colors_ids, SERVER_URL
 
 current_dir = Path(__file__).parent
 db_path = current_dir.parent / "db" / "portal_data.db"
@@ -65,7 +67,7 @@ def calculate_total_price(data: dict):
 
 def add_order(data: dict):
     request = """INSERT INTO Orders
-    (width, height, material_id, steklopaket_id, handle_color_id, handle_model_id, portal_color, price, scheme, user_id)
+    (width, height, material_id, steklopaket_id, handle_color_id, handle_model_id, portal_color, scheme, price, user_id)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
     cursor.execute(request, (*data.values(),))
     connect.commit()
@@ -86,5 +88,34 @@ def return_orders_by_user_id(user_id):
         material, handle_color, handle_model = materials[material_id], colors_ids[handle_color_id], handle_models[
             handle_model_id]
         glass = 'односторонний' if glass_id == 1 else 'двусторонний'
-        result.append((width, height, material, glass, handle_color, handle_model, portal_color, price, scheme))
+        result.append((width, height, material, glass, handle_color, handle_model, portal_color, scheme, price))
     return result
+
+
+def return_all_orders():
+    request = "SELECT * FROM Orders"
+    orders = cursor.execute(request)
+    if not orders:
+        return []
+    result = []
+    for order in orders.fetchall():
+        _, w, h, material_id, glass_id, handle_color_id, handle_model_id, portal_color, price, scheme, user_id = order
+        material, handle_color, handle_model = materials[material_id], colors_ids[handle_color_id], handle_models[
+            handle_model_id]
+        glass = 'односторонний' if glass_id == 1 else 'двусторонний'
+        user = get(f"{SERVER_URL}/api/users/{user_id}")
+        if user.status_code != 200:
+            user_name = 'Удаленный аккаунт'
+        else:
+            user_name = user.json()['users'][0]['name']
+        result.append((user_name, w, h, material, glass, handle_color, handle_model, portal_color, scheme, price))
+    return result
+
+
+def popular_scheme():
+    req = """SELECT scheme, COUNT(scheme) FROM Orders
+            GROUP BY scheme
+            ORDER BY COUNT(scheme) DESC"""
+    res = cursor.execute(req).fetchall()
+    return res
+print(popular_scheme())
