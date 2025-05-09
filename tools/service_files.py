@@ -1,7 +1,7 @@
 import os
 
 import requests.exceptions
-from requests import get, delete
+from requests import get
 
 SERVER_URL = 'http://127.0.0.1:8080'
 
@@ -13,7 +13,7 @@ materials = {1: "дуб", 2: "сосна", 3: "лиственница"}
 def return_files(path):
     # возвращает все файл из заданного пути
     if not os.path.exists(path):
-        return ['A', 'AF', 'C', 'CF', 'E', 'EF', 'G', 'L']
+        return []
     file_list = []
     for currentdir, dirs, files in os.walk(path):
         for file in files:

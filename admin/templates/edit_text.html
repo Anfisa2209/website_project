@@ -1,0 +1,19 @@
+{% extends "index.html" %}
+
+{% block content %}
+<form method="POST" style="margin:20px;" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <div class="input-wrapper" id="textField">
+        {{ form.text.label(class="form-label") }}
+        {{ form.text(
+            class="form-control",
+            placeholder="Начните писать..."
+        ) }}
+        {% for error in form.text.errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-warning mt-3">Сохранить</button>
+</form>
+{% endblock %}

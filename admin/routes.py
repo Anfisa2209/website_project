@@ -6,7 +6,9 @@ from flask_login import login_required, current_user
 from requests import get, post, put, delete
 from werkzeug.utils import secure_filename
 
+from data.forms.edit_text_form import EditTextForm
 from data.forms.project_form import ProjectForm
+from tools.scheme_list import TEXTS_LIST, SCHEME_LIST
 from tools.service_files import SERVER_URL
 
 admin_bp = Blueprint('admin', __name__, template_folder='templates', static_folder='static',
@@ -65,7 +67,36 @@ def comments():
 
 @admin_bp.route('/texts')
 def texts():
-    return 'texts'
+    return render_template('text_list.html', texts_list=TEXTS_LIST)
+
+
+@admin_bp.route('/edit_text/<link>', methods=['GET', 'POST'])
+def edit_texts(link):
+    original_link = link
+    if original_link in SCHEME_LIST:
+        file_path = f'schemes_text/{original_link}'
+    else:
+        file_path = original_link
+    full_path = os.path.join('./static/infos', f'{file_path}.txt')
+    try:
+        with open(full_path, encoding='utf-8') as f:
+            file_text = f.read()
+    except FileNotFoundError:
+        flash("Файл не найден", 'danger')
+        return redirect('/admin')
+
+    form = EditTextForm()
+
+    if form.validate_on_submit():
+        try:
+            with open(full_path, 'w', encoding='utf-8') as f:
+                f.write(form.text.data)
+            flash('Текст успешно сохранён', 'success')
+            return redirect('/admin')
+        except Exception as e:
+            flash(f'Ошибка при записи файла: {str(e)}', 'danger')
+    form.text.data = file_text
+    return render_template('edit_text.html', form=form)
 
 
 @admin_bp.route('/projects')

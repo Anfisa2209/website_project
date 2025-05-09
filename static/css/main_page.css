@@ -44,8 +44,8 @@
     animation: none !important;
 }
 .image { /*задаем другие параметры для шестерёнки на этой странице*/
-  width: 40vw;
-  height:40vw;
+  width:  var(--setting-size);
+  height: var(--setting-size);
   left: -40vw;
   animation: start-setting-animation var(--animation-time) ease-out forwards, roll-back 5s var(--animation-time) ease-out forwards;
   }

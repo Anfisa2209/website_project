@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, redirect, abort, request, flash
 from flask_login import LoginManager, login_required, logout_user, login_user, current_user
 from flask_restful import Api
-from requests import post, put
+from requests import post, put, delete
 
 from admin.routes import admin_bp
 from api.comments.comment_resource import CommentsListResource, CommentsResource
@@ -95,7 +95,7 @@ def index():
     css_file = url_for('static', filename='css/main_page.css')
     scheme_images = [i.split("/")[-1] for i in return_files('static/img/scheme')]
     pair_images = create_tuple(scheme_images)
-    hs_info = open('static/infos/hs_info', encoding='utf-8').read()
+    hs_info = open('static/infos/hs_info.txt', encoding='utf-8').read()
     return render_template('projects_page.html',
                            title='Главная страница',
                            css_url=css_file,

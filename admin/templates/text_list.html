@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<h1>Текст:</h1>
+<div class="list-group">
+    {% for link, text in texts_list.items()%}
+  <a href="/admin/edit_text/{{link}}" class="list-group-item list-group-item-action">{{text}}</a>
+    {% endfor %}
+
+</div>
+{% endblock %}
