@@ -99,7 +99,7 @@ def edit_texts(link):
         except Exception as e:
             flash(f'Ошибка при записи файла: {str(e)}', 'danger')
     form.text.data = file_text
-    return render_template('edit_text.html', form=form)
+    return render_template('edit_text.html', form=form, text_about=TEXTS_LIST[link])
 
 
 @admin_bp.route('/projects')

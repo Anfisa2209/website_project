@@ -46,9 +46,11 @@
 </form>
 </div>
 
+{% if project_id %}
 <div>
     <a class="btn btn-danger" href="/admin/delete_project/{{project_id}}">Удалить Проект</a>
 </div>
+{% endif %}
 
 
 {% endblock %}

@@ -118,4 +118,3 @@ def popular_scheme():
             ORDER BY COUNT(scheme) DESC"""
     res = cursor.execute(req).fetchall()
     return res
-print(popular_scheme())

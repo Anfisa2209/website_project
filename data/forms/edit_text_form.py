@@ -4,6 +4,6 @@ from wtforms.validators import DataRequired
 
 
 class EditTextForm(FlaskForm):
-    text = TextAreaField('Текст', validators=[DataRequired()])
+    text = TextAreaField(validators=[DataRequired()])
 
     submit = SubmitField('Сохранить')

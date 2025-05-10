@@ -42,6 +42,9 @@
                 <div class="project-text">
                     <div class="text-block">
                         {{project_text_dict[project] | safe}}
+                        {%if current_user.is_admin %}
+                        <a class="btn btn-warning" href="/admin/edit_project/{{projects_titles[loop.index - 1]['id']}}">Изменить</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

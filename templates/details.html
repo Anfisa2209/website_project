@@ -41,6 +41,9 @@
     <div class="scheme-text">
         <div class="text-block" style="padding:10px">
             {{text_scheme}}
+            {%if current_user.is_admin %}
+            <a class="btn btn-warning" href="/admin/edit_text/{{image_id}}">Изменить</a>
+            {% endif %}
         </div>
 
     </div>
