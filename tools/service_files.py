@@ -3,7 +3,7 @@ import os
 import requests.exceptions
 from requests import get
 
-SERVER_URL = 'http://127.0.0.1:8080'
+SERVER_URL = 'http://127.0.0.1:5000'
 
 handle_models = {1: 'односторонняя', 2: 'двухсторонняя'}
 colors_ids = {1: "серебро", 2: "бронза", 3: "белый", 4: 'коричневый'}
