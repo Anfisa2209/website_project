@@ -64,12 +64,16 @@ def logout():
 @app.route('/delete_comment/<int:comment_id>,<image_id>')
 def delete_comment(comment_id, image_id):
     comment = get(f"{SERVER_URL}/{API_PREFIX}/comments/{comment_id}").json()
-    if comment['comments'][0]['user_id'] != current_user.id:
+    if not comment.get('comments'):
+        abort(404)
+    user_id = comment['comments'][0]['user_id']
+    if not current_user.is_admin and user_id != current_user.id:
         abort(403)
     if delete(f'{SERVER_URL}/{API_PREFIX}/comments/{comment_id}').json().get("success"):
         flash('Комментарий удален', 'success')
-        return redirect(f'/scheme/{image_id}')
-    return
+    else:
+        flash('Не удалось удалить комментарий', 'danger')
+    return redirect(f'/scheme/{image_id}')
 
 
 @app.route('/update_comment/<int:comment_id>', methods=['POST'])
