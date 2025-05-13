@@ -144,13 +144,13 @@ def calculate(scheme):
     form = CalculateFrom(scheme_limits=scheme_limits)
     if form.validate_on_submit():
         form_data = {
-            'width': form.width.data,
-            'height': form.height.data,
+            'width': int(form.width.data),
+            'height': int(form.height.data),
             'material': int(form.materials.data),
             'steklopakets': int(form.steklopakets.data),
             'handle_color': int(form.handle_color.data),
             'handle_models': int(form.handle_models.data),
-            'portal_color': form.color.data,
+            'portal_color': str(form.color.data),
             'scheme_id': scheme_id
         }
 
