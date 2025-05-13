@@ -298,18 +298,30 @@ def comments_list():
 @app.route('/projects')
 def projects():
     project_photo_path = './static/img/projects'
-    photo_dirs_list = return_dirs(project_photo_path)  # возвращает все директории в папке ./static/img/projects
-    text_files_list = return_files('./static/infos/projects_text')  # возвращает все тексты
+    # возвращает все директории в папке ./static/img/projects в порядке возрастании по айди
+    photo_dirs_list = sorted(return_dirs(project_photo_path), key=lambda x: int(x[-1]))
+    # возвращает все текст в папке ./static/infos/projects_text в порядке возрастании по айди
+    text_files_list = sorted(return_files('./static/infos/projects_text'), key=lambda x: int(x.split('.txt')[0][-1]))
 
-    # словарь с фотографиями для каждого проекта
-    projects_dict = {f'project_{i}': return_files(path) for i, path in enumerate(photo_dirs_list, 1)}
-    # словарь с текстами для каждого проекта
-    project_text_dict = {f'project_{i}': open(path, encoding='utf-8').read() for i, path in
-                         enumerate(text_files_list, 1)}
     projects_titles = get(f"{SERVER_URL}/api/projects").json().get('projects', [])
+    css = url_for('static', filename='css/project_content.css')
+    if not projects_titles:
+        return render_template('projects.html', projects_dict=[], projects_titles=[],
+                               project_text_dict=[], css_url=css, title='Проекты')
+    # словарь с фотографиями для каждого проекта по айди
+    projects_dict = {f'project_{project["id"]}': return_files(path) for path, project in
+                     zip(photo_dirs_list, projects_titles)}
+
+    # словарь с текстами для каждого проекта по айди
+    project_text_dict = {}
+    for path, project in zip(text_files_list, projects_titles):
+        try:
+            project_text_dict[f'project_{project["id"]}'] = open(path, encoding='utf-8').read()
+        except FileNotFoundError:
+            project_text_dict[f'project_{project["id"]}'] = 'Не смогли найти текст про этот проект, скоро исправим'
     return render_template('projects.html', projects_dict=projects_dict, projects_titles=projects_titles,
                            project_text_dict=project_text_dict,
-                           css_url=url_for('static', filename='css/project_content.css'), title='Проекты')
+                           css_url=css, title='Проекты')
 
 
 @app.route('/contacts')
