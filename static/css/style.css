@@ -139,4 +139,33 @@ main {
         max-width: ;
         overflow-wrap: break-word;
     }
+    .openedMenu {
+        overflow-y: auto;
+        max-height: 70vh;
+        position: fixed;
+        top: 100px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto;
+        margin-left: 0;
+        padding: 20px;
+  }
+
+  .div1, .div2, .div3, .div4 {
+    grid-area: auto !important;
+    margin-bottom: 30px;
+  }
+
+  .div4 {
+    order: 4;
+    text-align: center;
+  }
+
+  .menu-bar {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
 }
