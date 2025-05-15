@@ -43,9 +43,9 @@
         <ul>
             {% if current_user.is_authenticated %}
               <li><a href="/profile"> Мой профиль</a></li>
-                {% if current_user.is_admin %}
+
                 <li><a href="/admin"> Админ панель</a></li>
-                {% endif %}
+
             {% else %}
               <li><a href="/login">Войти</a></li>
               <li><a href="/register">Зарегистрироваться</a></li>

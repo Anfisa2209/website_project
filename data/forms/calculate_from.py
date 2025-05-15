@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, RadioField, IntegerField, ColorField
+from wtforms import SubmitField, RadioField, IntegerField
 from wtforms.validators import DataRequired, NumberRange
+from wtforms_components import ColorField
 
 
 class CalculateFrom(FlaskForm):
@@ -50,4 +51,3 @@ class CalculateFrom(FlaskForm):
                     message=f"Ширина должна быть между {scheme_limits['min_width']} и {scheme_limits['max_width']} мм"
                 )
             ]
-

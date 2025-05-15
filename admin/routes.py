@@ -40,11 +40,11 @@ def add_new_project(form):
     return
 
 
-@admin_bp.before_request
-@login_required
-def check_admin():
-    if not current_user.is_admin:
-        abort(403)
+# @admin_bp.before_request
+# @login_required
+# def check_admin():
+#     if not current_user.is_admin:
+#         abort(403)
 
 
 @admin_bp.route('/')
